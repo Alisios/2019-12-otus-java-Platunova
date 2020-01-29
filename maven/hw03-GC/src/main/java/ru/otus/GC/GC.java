@@ -53,8 +53,8 @@ public class GC {
         switchOnMonitoring();
         long beginTime = System.currentTimeMillis();
 
-        ///int size = 5_520_000;
-        int size = 1_000_000;
+        int size = 5_520_000;
+        ///int size = 1_000_000;
         int loopCounter = 800;
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName( "ru.otus:type=Benchmark" );
