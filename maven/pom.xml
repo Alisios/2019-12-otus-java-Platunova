@@ -21,6 +21,8 @@
 
     <modules>
         <module>hw01-maven</module>
+        <module>hw02-generics</module>
+        <module>hw03-GC</module>
     </modules>
 
     <properties>
