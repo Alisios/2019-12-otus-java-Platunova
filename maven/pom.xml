@@ -23,6 +23,7 @@
         <module>hw01-maven</module>
         <module>hw02-generics</module>
         <module>hw03-GC</module>
+        <module>hw05-Annotations</module>
     </modules>
 
     <properties>
