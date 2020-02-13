@@ -1,46 +1,48 @@
 package ru.otus.Annotations;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 class TestLaunch {
-    private static long exceprionsForAllTests = 0;
-    private static long numberOfTests = 0;
-    private static long counter = 0;
+    private static long exceptionsForAllTests = 0;
+    private static long numberOfSuccessfulTests = 0;
     static void launch(String name) throws Exception {
-        String className = "ru.otus.Annotations" + "." + name;
-        Class obj = Class.forName(className);
-        Object testObj = obj.newInstance();
-        try {
-            Method[] m = obj.getDeclaredMethods();
-            for (var m1 : m)
-                if (m1.isAnnotationPresent(Before.class)) {
-                    m1.setAccessible(true);
-                    m1.invoke(testObj);
-                } else if (m1.isAnnotationPresent(Test.class)) {
-                    m1.setAccessible(true);
-                    m1.invoke(testObj);
-                } else if (m1.isAnnotationPresent(After.class)) {
-                    m1.setAccessible(true);
-                    m1.invoke(testObj);
-                }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            counter++;
-        }
-        finally {
-            Method meth_error = testObj.getClass().getMethod("getErrors");
-            meth_error.setAccessible(true);
-            exceprionsForAllTests +=(long) meth_error.invoke(testObj);;
+        Class obj = Class.forName(name);
+        Method[] methodsOfObject = obj.getDeclaredMethods();
+        ArrayList<Method> BeforeList = new ArrayList<>();
+        ArrayList<Method> AfterList = new ArrayList<>();
+        ArrayList<Method> TestList = new ArrayList<>();
 
-            Method meth_number = testObj.getClass().getMethod("getTestNumber");
-            meth_number.setAccessible(true);
-            numberOfTests +=(long) meth_number.invoke(testObj);
+        for (var m1 : methodsOfObject) {
+            if (m1.isAnnotationPresent(Before.class))
+                BeforeList.add(m1);
+            if (m1.isAnnotationPresent(Test.class))
+                TestList.add(m1);
+            if (m1.isAnnotationPresent(After.class))
+                AfterList.add(m1);
+        }
+        for (Method mTest : TestList) {
+            Object testObj = obj.newInstance();
+            for (Method mBefore : BeforeList) {
+                mBefore.setAccessible(true);
+                mBefore.invoke(testObj);
+            }
+            try {
+                mTest.setAccessible(true);
+                mTest.invoke(testObj);
+                numberOfSuccessfulTests++;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                exceptionsForAllTests++;
+            }
+            for (Method mAfter : AfterList) {
+                mAfter.setAccessible(true);
+                mAfter.invoke(testObj);
+            }
         }
     }
-    static void Result(){
-        System.out.println("There were "+ numberOfTests + "  tests. Among them "+
-                (numberOfTests-exceprionsForAllTests) + " successfull tests and "+ exceprionsForAllTests + " failed tests.");
-        System.out.println("Number of exceptions in launch "+ counter );
+    static void ResultTrace(){
+        System.out.println("There was "+ (numberOfSuccessfulTests+ exceptionsForAllTests) + " tests: "+
+                numberOfSuccessfulTests + " successfull test(s) and "+ exceptionsForAllTests + " failed test(s).");
     }
-
 }
