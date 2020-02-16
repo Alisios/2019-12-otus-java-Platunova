@@ -1,6 +1,6 @@
 package ru.otus.Annotations;
 
-public class ContainerTest {
+public class ContainerTest  {
     @Before
     public void settings(){
         System.out.println("Settings");
@@ -12,7 +12,7 @@ public class ContainerTest {
     };
 
     @Test
-    public void test1(){
+    public void test1() {
         System.out.println("Test #1");
     }
 
@@ -34,5 +34,4 @@ public class ContainerTest {
     public void settings3() {
         System.out.println("Settings3");
     }
-
 }
