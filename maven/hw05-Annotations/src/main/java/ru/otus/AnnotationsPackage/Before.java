@@ -1,4 +1,4 @@
-package ru.otus.Annotations;
+package ru.otus.AnnotationsPackage;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

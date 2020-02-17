@@ -2,6 +2,7 @@ package ru.otus.Annotations;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import ru.otus.AnnotationsPackage.*;
 
 class TestLaunch {
     private static long exceptionsForAllTests = 0;

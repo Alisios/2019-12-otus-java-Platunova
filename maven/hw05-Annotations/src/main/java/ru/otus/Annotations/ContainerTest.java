@@ -1,4 +1,5 @@
 package ru.otus.Annotations;
+import ru.otus.AnnotationsPackage.*;
 
 public class ContainerTest  {
     @Before
