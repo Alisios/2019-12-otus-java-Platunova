@@ -7,7 +7,7 @@ import ru.otus.AnnotationsPackage.*;
 class TestLaunch {
     private static long exceptionsForAllTests = 0;
     private static long numberOfSuccessfulTests = 0;
-    static String launch(String name) throws Exception {
+    static void launch(String name) throws Exception {
         Class obj = Class.forName(name);
         Method[] methodsOfObject = obj.getDeclaredMethods();
         ArrayList<Method> beforeList = new ArrayList<>();
@@ -43,8 +43,14 @@ class TestLaunch {
                 mAfter.invoke(testObj);
             }
         }
-
-    return "There was "+ (numberOfSuccessfulTests+ exceptionsForAllTests) + " tests: "+
-                     numberOfSuccessfulTests + " successfull test(s) and "+ exceptionsForAllTests + " failed test(s).";
+    }
+    static long getNumberOfSuccessfulTests(){
+        return numberOfSuccessfulTests;
+    }
+    static long getNumberOfTests(){
+        return numberOfSuccessfulTests+exceptionsForAllTests;
+    }
+    static long getNumberOfFailedTests(){
+        return exceptionsForAllTests;
     }
 }
