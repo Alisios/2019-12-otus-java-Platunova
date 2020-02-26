@@ -24,6 +24,7 @@
         <module>hw02-generics</module>
         <module>hw03-GC</module>
         <module>hw05-Annotations</module>
+        <module>hw06-atm</module>
     </modules>
 
     <properties>
