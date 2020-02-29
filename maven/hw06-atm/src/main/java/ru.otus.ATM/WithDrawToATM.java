@@ -4,36 +4,39 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** класс реализует снятие денежных средств с кассеты **/
-public class WithDrawToCassette {
-    private Cassette cassette;
+/** класс реализует снятие денежных средств из атм с кассет различных номиналов **/
+class WithDrawToATM implements Command{
+    private AtmProcessor atmProcessor;
+    private int sum;
     private TreeMap<Integer, Integer> out = new TreeMap<>(Collections.reverseOrder());
 
-    WithDrawToCassette(Cassette cassette){
-        this.cassette=cassette;
+    WithDrawToATM(AtmProcessor atmProcessor, int sum){
+        this.atmProcessor=atmProcessor;
+        this.sum=sum;
     }
 
-  void execute (int sum){
-        if (sum > cassette.balance())
+    @Override
+    public void execute(){
+        if (sum > atmProcessor.balance())
             throw new RuntimeException("Запрошенная сумма некорректна. Попробуйте задать меньшую сумму.");
-        if ((sum % (Collections.min(cassette.getNominal())))!=0)
+        if ((sum % (Collections.min(atmProcessor.getNominal())))!=0)
             throw new RuntimeException("Запрошенная сумма некорректна.");
         int sumTemp = sum;
 
-        for (Map.Entry<Integer, Integer> i: cassette.getCassette().entrySet()) {
+        for (Map.Entry<Integer, Integer> i: atmProcessor.getCassetteMap().entrySet()) {
             int  nominal = i.getKey();
             int  numberOfNominal = i.getValue();
             if (sumTemp > 0) {
                 int temp = nominal * numberOfNominal;
                 if (temp < sumTemp) {
                     out.put(nominal, numberOfNominal);
-                    cassette.getCassette().put(nominal, 0);
+                    atmProcessor.getCassetteMap().put(nominal, 0);
                     sumTemp -= temp;
                 }
                 else {
                     if (sumTemp >= nominal) {
                         int nom = (int) (sumTemp / nominal);
-                        cassette.getCassette().put(nominal, numberOfNominal - nom);
+                        atmProcessor.getCassetteMap().put(nominal, numberOfNominal - nom);
                         out.put(nominal, nom);
                         sumTemp -= nom*nominal;
                     }
@@ -47,3 +50,4 @@ public class WithDrawToCassette {
     }
 
 }
+
