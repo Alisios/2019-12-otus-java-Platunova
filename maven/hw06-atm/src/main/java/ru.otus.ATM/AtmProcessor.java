@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.TreeMap;
 
 /**класс реализует инициализцаию атм с кассетами различных номиналов и функционал его работы **/
-class AtmProcessor {
+class AtmProcessor implements Atm{
 
     private TreeMap<Integer, Integer> casseteMap =  new TreeMap<>(Collections.reverseOrder());
 
@@ -26,12 +26,14 @@ class AtmProcessor {
     }
 
     /** внесение средств в атм **/
-    void depositeMoney(ArrayList<Integer> nominal, ArrayList<Integer> numberOfNominal){
+    @Override
+    public void depositeMoney(ArrayList<Integer> nominal, ArrayList<Integer> numberOfNominal){
         var depositeToCassette = new DepositeToCassettes(this, nominal, numberOfNominal);
         depositeToCassette.execute();
     }
 
     /** снятие средств из атм **/
+    @Override
     public void withDrawMoney(int sum){
         var withDrawToCassette = new WithDrawToATM(this, sum);
         withDrawToCassette.execute();
