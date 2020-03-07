@@ -1,4 +1,4 @@
-package ru.otus.atmDepartment;
+package ru.otus.atmDepartment.Atm;
 
 enum NominalForCassette {
 

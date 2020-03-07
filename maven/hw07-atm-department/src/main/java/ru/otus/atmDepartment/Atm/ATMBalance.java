@@ -1,4 +1,4 @@
-package ru.otus.atmDepartment;
+package ru.otus.atmDepartment.Atm;
 
 import java.util.Map;
 
@@ -6,13 +6,8 @@ import java.util.Map;
 class ATMBalance implements Command{
 
     private double sum = 0;
-    private AtmProcessor atmProcessor;
-    ATMBalance(AtmProcessor atmProcessor){
-        this.atmProcessor = atmProcessor;
-    }
-
     @Override
-    public void execute(){
+    public void execute(AtmProcessor atmProcessor){
         for (Map.Entry<Integer, Integer> i: atmProcessor.getCassetteMap().entrySet())
             sum += i.getKey()*i.getValue();
     }

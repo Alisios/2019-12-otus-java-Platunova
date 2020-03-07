@@ -1,17 +1,16 @@
 package ru.otus.atmDepartment;
-import java.util.ArrayList;
-
+import ru.otus.atmDepartment.Atm.Atm;
 
 /**Сохранение состояния атм и его сброс до начального состояния**/
 class Originator {
-        private final ArrayList <Memento> arrayList = new ArrayList<>();
+    private Memento memento;
 
-        void saveState(AtmProcessor state) {
-            arrayList.add(new Memento(state));
-        }
+    void saveState(Atm state) {
+        memento = new Memento(state);
 
-    AtmProcessor restoreState() {
-            return arrayList.get(0).getState();
-        }
     }
+    Atm restoreState() {
+        return memento.getState();
+    }
+}
 

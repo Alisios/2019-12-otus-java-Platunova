@@ -1,14 +1,15 @@
 package ru.otus.atmDepartment;
 
+import ru.otus.atmDepartment.Atm.Atm;
 
 public class Memento {
-    private final AtmProcessor state;
+    private final Atm state;
 
-    Memento(AtmProcessor state) {
+    Memento(Atm state) {
         this.state = state.clone();
     }
 
-    AtmProcessor getState() {
+    Atm getState() {
         return state.clone();
     }
 }

@@ -1,11 +1,12 @@
 package ru.otus.atmDepartment;
+import ru.otus.atmDepartment.Atm.Atm;
 
 /**Класс предоставляет собой упрощенный функционал банкомата AtmProcessor**/
 public class AtmFacade implements Observer{
-    private AtmProcessor atmProcessor;
+    private Atm atmProcessor;
     private Originator originator = new Originator();
 
-    AtmFacade(AtmProcessor atmProcessor){
+    AtmFacade(Atm atmProcessor){
         this.atmProcessor = atmProcessor;
         originator.saveState(this.atmProcessor);
     }
@@ -19,7 +20,7 @@ public class AtmFacade implements Observer{
         return atmProcessor.balance();
     }
 
-    AtmProcessor getAtmProcessor(){
+    Atm getAtmProcessor(){
         return atmProcessor;
     }
 }

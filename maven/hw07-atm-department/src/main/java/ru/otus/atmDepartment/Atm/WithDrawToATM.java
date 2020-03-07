@@ -1,4 +1,4 @@
-package ru.otus.atmDepartment;
+package ru.otus.atmDepartment.Atm;
 
 import java.util.Collections;
 import java.util.Map;
@@ -6,17 +6,15 @@ import java.util.TreeMap;
 
 /** класс реализует снятие денежных средств из атм с кассет различных номиналов **/
 class WithDrawToATM implements Command{
-    private AtmProcessor atmProcessor;
     private int sum;
     private TreeMap<Integer, Integer> out = new TreeMap<>(Collections.reverseOrder());
 
-    WithDrawToATM(AtmProcessor atmProcessor, int sum){
-        this.atmProcessor=atmProcessor;
+    WithDrawToATM(int sum){
         this.sum=sum;
     }
 
     @Override
-    public void execute(){
+    public void execute(AtmProcessor atmProcessor){
         if (sum > atmProcessor.balance())
             throw new RuntimeException("Запрошенная сумма некорректна. Попробуйте задать меньшую сумму.");
         if ((sum % (Collections.min(atmProcessor.getNominal())))!=0)

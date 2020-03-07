@@ -1,8 +1,9 @@
 package ru.otus.atmDepartment;
 
+import ru.otus.atmDepartment.Atm.AtmProcessor;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 public class AtmDepartmentWork {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package ru.otus.atmDepartment;
+package ru.otus.atmDepartment.Atm;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,11 +6,11 @@ import java.util.Collections;
 import java.util.TreeMap;
 
 /**класс реализует инициализцаию атм с кассетами различных номиналов и функционал его работы **/
-class AtmProcessor implements Atm, Cloneable{
+public class AtmProcessor implements Atm, Cloneable{
 
     private TreeMap<Integer, Integer> casseteMap =  new TreeMap<>(Collections.reverseOrder());
 
-     AtmProcessor(ArrayList<Integer> numberOfEachNominal) {
+     public AtmProcessor(ArrayList<Integer> numberOfEachNominal) {
         if (NominalForCassette.values().length != numberOfEachNominal.size())
             throw new RuntimeException("Несоответсвие количества наборов купюр количеству номинала.");
         else {
@@ -38,15 +38,15 @@ class AtmProcessor implements Atm, Cloneable{
     /** внесение средств в атм **/
     @Override
     public void depositeMoney(ArrayList<Integer> nominal, ArrayList<Integer> numberOfNominal){
-        var depositeToCassette = new DepositeToCassettes(this, nominal, numberOfNominal);
-        depositeToCassette.execute();
+        var depositeToCassette = new DepositeToCassettes( nominal, numberOfNominal);
+        depositeToCassette.execute(this);
     }
 
     /** снятие средств из атм **/
     @Override
     public void withDrawMoney(int sum){
-        var withDrawToCassette = new WithDrawToATM(this, sum);
-        withDrawToCassette.execute();
+        var withDrawToCassette = new WithDrawToATM(sum);
+        withDrawToCassette.execute(this);
         System.out.println(withDrawToCassette.getDetailsOfLastWithdrawing());
     }
 
@@ -62,9 +62,10 @@ class AtmProcessor implements Atm, Cloneable{
 
 
     /** общая сумма денежных средств на кассете **/
-     double balance(){
-        var cassetteBalance = new ATMBalance(this);
-        cassetteBalance.execute();
+    @Override
+     public double balance(){
+        var cassetteBalance = new ATMBalance();
+        cassetteBalance.execute(this);
         return cassetteBalance.getBalance();
     }
 }

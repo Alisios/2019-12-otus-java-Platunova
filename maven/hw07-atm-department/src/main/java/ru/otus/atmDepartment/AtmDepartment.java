@@ -5,7 +5,7 @@ import java.util.List;
 /**Класс,реализующий объединение банкоматов, включающее в себя группу банкоматов. объединение может добалять новые банкоматы,
  * удалять их, сбрасывать состояние всех банкоматов до начального и вычислить сумму средств на всех банкоматах**/
 
-class AtmDepartment implements Subject{
+class AtmDepartment implements ManagerOfObservers{
     private final List<Observer> atmList;
 
     AtmDepartment(){
@@ -29,7 +29,6 @@ class AtmDepartment implements Subject{
 
     double balanceOfAllAtms() {
         var atmBalance = new AllAtmBalance(this);
-        atmBalance.execute();
         return atmBalance.getBalance();
     }
 
