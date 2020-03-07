@@ -7,7 +7,7 @@ import java.util.TreeMap;
 /** класс реализует снятие денежных средств из атм с кассет различных номиналов **/
 class WithDrawToATM implements Command{
     private int sum;
-    private TreeMap<Integer, Integer> out = new TreeMap<>(Collections.reverseOrder());
+    private Map<Integer, Integer> out = new TreeMap<>(Collections.reverseOrder());
 
     WithDrawToATM(int sum){
         this.sum=sum;
