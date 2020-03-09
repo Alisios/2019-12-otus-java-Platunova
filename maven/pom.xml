@@ -25,6 +25,7 @@
         <module>hw03-GC</module>
         <module>hw05-Annotations</module>
         <module>hw06-atm</module>
+        <module>hw07-atm-department</module>
     </modules>
 
     <properties>
