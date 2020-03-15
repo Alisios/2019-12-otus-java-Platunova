@@ -16,7 +16,7 @@ class DIYgson {
 
     /** выбор метода перевода объекта в формат Json в зависимости от типа объекта**/
     private String chooseMethodToJson(Object obj) {
-        if (obj.getClass().getTypeName().contains("[]"))
+        if (obj.getClass().isArray())
             return arrayClassToJson(obj);
         else if (obj.getClass().getTypeName().contains("java.lang."))
             return primitiveClassToJson(obj);

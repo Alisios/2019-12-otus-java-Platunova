@@ -26,6 +26,7 @@
         <module>hw05-Annotations</module>
         <module>hw06-atm</module>
         <module>hw07-atm-department</module>
+        <module>hw08-json</module>
     </modules>
 
     <properties>
