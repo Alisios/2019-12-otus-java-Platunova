@@ -28,6 +28,7 @@
         <module>hw07-atm-department</module>
         <module>hw08-json</module>
         <module>hw10-hibernate</module>
+        <module>hw11-cache</module>
     </modules>
 
     <properties>
