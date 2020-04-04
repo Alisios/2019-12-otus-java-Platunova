@@ -12,6 +12,7 @@ public class JsonWork {
     public static void main(String[] args) {
         var serializer = new DIYgson();
         Gson gson = new Gson();
+        System.out.println(serializer.toJson(new HWObject()));
         System.out.println("Are two gsons equals? " +  gson.toJson(new HWObject()).equals(serializer.toJson(new HWObject())));
     }
 }
