@@ -1,7 +1,6 @@
 package ru.otus.hibernate.dao;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.api.dao.UserDao;
