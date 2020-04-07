@@ -6,13 +6,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.annotations.Cache;
 
 @Entity
 @Table(name = "tUsers")
-//@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="myEntityCache")
+
 @Cacheable
-//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class User {
 
