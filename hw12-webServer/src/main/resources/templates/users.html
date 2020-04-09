@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Пользователи</title>
+</head>
+<body>
+<h4>СТРАНИЦА АДМИНИСТРАТОРА</h4>
+<div class="top">
+<img src="img/pic.png" style="width: 300px; height: 250px">
+ <br/>
+<h4>Создать нового пользователя:</h4>
+<form method="post">
+    <label>
+        Введите имя пользователя <br/>
+        <input type="text" name="name" >
+    </label>
+    <br/>
+    <label>
+        Введите возраст<br/>
+        <input type="text" name="age">
+    </label>
+    <br/>
+    <label>
+        Введите логин<br/>
+        <input type="text" name="login">
+    </label>
+    <br/>
+    <label>
+        Введите пароль<br/>
+        <input type="password" name="password">
+    </label>
+    <br/><br/>
+    <input type="submit" value="Создать пользователя">
+</form>
+
+<h4>Список всех пользователей: </h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 100px">Id</td>
+        <td style="width: 200px">Имя</td>
+        <td style="width: 100px">Возраст</td>
+        <td style="width: 200px">Логин</td>
+        <td style="width: 200px">Пароль</td>
+    </tr>
+    </thead>
+    <tbody>
+    <#list tableOfUsers as user>
+    <tr>
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.age}</td>
+        <td>${user.login}</td>
+        <td>${user.password}</td>
+    </tr>
+    </#list>
+    </tbody>
+</table>
+
+</div>
+</body>
+</html>
