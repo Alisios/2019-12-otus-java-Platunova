@@ -20,11 +20,11 @@ public class UserDaoHibernate implements UserDao {
     private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 
     private final SessionManagerHibernate sessionManager;
-    private MyCache<Long, User> cache = new MyCache<>();
+    private MyCache<String, User> cache = new MyCache<>();
 
-    private final HwListener<Long, User> listener = new HwListener<Long, User>() {
+    private final HwListener<String, User> listener = new HwListener<String, User>() {
         @Override
-        public void notify(Long key, User value, String action) {
+        public void notify(String key, User value, String action) {
             logger.info("key:{}, value:{}, action: {}", key, value, action);
         }
     };
@@ -37,14 +37,14 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        if (cache.getCache().containsKey(id)){
-            return Optional.ofNullable(cache.get(id));
+        if (cache.getCache().containsKey(Long.toString(id))){
+            return Optional.ofNullable(cache.get(Long.toString(id)));
         }
         else{
             DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
             try {
                 Optional<User> temp = Optional.ofNullable(currentSession.getHibernateSession().get(User.class, id));
-                cache.put(id, temp.get());
+                cache.put(Long.toString(id), temp.get());
                 return temp;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -64,7 +64,7 @@ public class UserDaoHibernate implements UserDao {
                 hibernateSession.persist(user);
             }
             hibernateSession.save(user);
-            cache.put(user.getId(),user);
+            cache.put(Long.toString(user.getId()),user);
             return user.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

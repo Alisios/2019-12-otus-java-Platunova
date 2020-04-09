@@ -15,7 +15,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
     listeners.forEach(listener -> listener.notify(key, value, "put"));
   }
 
-  public Map getCache() {
+  public Map <K, V> getCache() {
     return cache;
   }
 
