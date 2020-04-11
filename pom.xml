@@ -22,6 +22,8 @@
     <modules>
         <module>maven</module>
         <module>hw12-webServer</module>
+        <module>hw04-Instrumentation</module>
+
 
     </modules>
 
