@@ -1,4 +1,5 @@
 package ru.otus.Instrumentation;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -9,8 +10,8 @@ import java.util.List;
 class IoC <T> {
 
     @SuppressWarnings("unchecked")
-    static <T> T createLoggingProxy(T testLogging) {
-        InvocationHandler handler = new LogInvocationHandler<>(testLogging);
+    static <T> T createLoggingProxy(T testLogging, Class< ? extends Annotation> testLoggingInterface) {
+        InvocationHandler handler = new LogInvocationHandler<>(testLogging, testLoggingInterface);
 
         return (T) Proxy.newProxyInstance(IoC.class.getClassLoader(),
                 new Class<?>[]{TestLoggingInterface.class}, handler);
@@ -20,9 +21,9 @@ class IoC <T> {
         private final T testLogging;
         private static List<String> methodsWithAnnotationList = new ArrayList<>();
 
-        LogInvocationHandler(T testLogging) {
+        LogInvocationHandler(T testLogging, Class< ? extends Annotation> testLoggingInterface) {
             this.testLogging = testLogging;
-            defineMethodsWithAnnotation(testLogging);
+            defineMethodsWithAnnotation(testLogging,testLoggingInterface);
         }
 
         @Override
@@ -37,10 +38,10 @@ class IoC <T> {
             return methodsWithAnnotationList.contains(method.getName() + Arrays.toString(method.getParameterTypes()) + method.getReturnType().getName());
         }
 
-         private void defineMethodsWithAnnotation(T testLogging) {
+         private void defineMethodsWithAnnotation(T testLogging, Class<? extends Annotation> testLoggingInterface) {
             Class<?> cl = testLogging.getClass();
             for (Method m : cl.getDeclaredMethods()) {
-                if (m.isAnnotationPresent(TestLoggingAnnotation.class)) {
+                if (m.isAnnotationPresent(testLoggingInterface)) {
                     methodsWithAnnotationList.add(m.getName()+
                             Arrays.toString(m.getParameterTypes()) +
                             m.getReturnType().getName());
