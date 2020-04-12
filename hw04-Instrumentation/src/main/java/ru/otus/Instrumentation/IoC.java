@@ -10,20 +10,20 @@ import java.util.List;
 class IoC <T> {
 
     @SuppressWarnings("unchecked")
-    static <T> T createLoggingProxy(T testLogging, Class< ? extends Annotation> testLoggingInterface) {
-        InvocationHandler handler = new LogInvocationHandler<>(testLogging, testLoggingInterface);
+    static <T> T createLoggingProxy(T testLogging, Class<?> testLoggingInterface, Class< ? extends Annotation> testLoggingInterfaceAnnotation) {
+        InvocationHandler handler = new LogInvocationHandler<>(testLogging, testLoggingInterfaceAnnotation);
 
         return (T) Proxy.newProxyInstance(IoC.class.getClassLoader(),
-                new Class<?>[]{TestLoggingInterface.class}, handler);
+                new Class<?>[]{testLoggingInterface}, handler);
     }
 
     static class LogInvocationHandler <T> implements InvocationHandler {
         private final T testLogging;
         private static List<String> methodsWithAnnotationList = new ArrayList<>();
 
-        LogInvocationHandler(T testLogging, Class< ? extends Annotation> testLoggingInterface) {
+        LogInvocationHandler(T testLogging, Class< ? extends Annotation> testLoggingInterfaceAnnotation) {
             this.testLogging = testLogging;
-            defineMethodsWithAnnotation(testLogging,testLoggingInterface);
+            defineMethodsWithAnnotation(testLogging,testLoggingInterfaceAnnotation);
         }
 
         @Override
@@ -38,10 +38,10 @@ class IoC <T> {
             return methodsWithAnnotationList.contains(method.getName() + Arrays.toString(method.getParameterTypes()) + method.getReturnType().getName());
         }
 
-         private void defineMethodsWithAnnotation(T testLogging, Class<? extends Annotation> testLoggingInterface) {
+         private void defineMethodsWithAnnotation(T testLogging, Class<? extends Annotation> testLoggingInterfaceAnnotation) {
             Class<?> cl = testLogging.getClass();
             for (Method m : cl.getDeclaredMethods()) {
-                if (m.isAnnotationPresent(testLoggingInterface)) {
+                if (m.isAnnotationPresent(testLoggingInterfaceAnnotation)) {
                     methodsWithAnnotationList.add(m.getName()+
                             Arrays.toString(m.getParameterTypes()) +
                             m.getReturnType().getName());
