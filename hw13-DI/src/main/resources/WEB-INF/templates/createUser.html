@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Создать нового пользователя:</title>
+</head>
+
+<h4>Создать нового пользователя:</h4>
+<div class="top">
+<img src="img/users.svg" style="width: 150px; height: 150px">
+<form id="create-form" th:action="@{/create}" th:object="${user}" th:method="post" accept-charset="utf-8">
+    <label>
+        Введите имя пользователя <br/>
+        <input type="text" name="name" th:value="${user.name}" >
+    </label>
+    <br/>
+    <label>
+        Введите возраст<br/>
+        <input type="number" name="age" th:value="${user.age}">
+    </label>
+    <br/>
+    <label>
+        Введите логин<br/>
+        <input type="text" name="login" th:value="${user.login}">
+    </label>
+    <br/>
+    <label>
+        Введите пароль<br/>
+        <input type="password" name="password" th:value="${user.password}">
+    </label>
+    <br/><br/>
+    <button type="submit">Создать пользователя</button>
+</form>
+</div>
+</body>
+</html>

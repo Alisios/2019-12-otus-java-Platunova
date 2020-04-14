@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Пользователи</title>
+</head>
+
+<body>
+<h4>СТРАНИЦА АДМИНИСТРАТОРА</h4>
+<div class="top">
+<img src="img/pic.png" style="width: 300px; height: 250px">
+
+<h4>Список всех пользователей: </h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 100px">Id</td>
+        <td style="width: 200px">Имя</td>
+        <td style="width: 100px">Возраст</td>
+        <td style="width: 200px">Логин</td>
+        <td style="width: 200px">Пароль</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${tableOfUsers}">
+        <td th:text="${user.id}">id</td>
+        <td th:text="${user.name}">name</td>
+        <td th:text="${user.age}">age</td>
+        <td th:text="${user.login}">login</td>
+        <td th:text="${user.password}">password</td>
+    </tr>
+    </tbody>
+</table>
+
+    <br/>
+    <form th:action="@{/users}" method="post">
+        <button type="submit">Создать пользователя</button>
+    </form>
+    <br/>
+    <br/>
+
+</div>
+</body>
+</html>
