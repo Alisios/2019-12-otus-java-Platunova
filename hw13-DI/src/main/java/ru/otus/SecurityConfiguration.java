@@ -34,7 +34,11 @@ private UserAuthorisationService userDetailsService;
                 .authorizeRequests().antMatchers("/users","/create").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
-                .and().sessionManagement().disable();
+                .and().sessionManagement().disable()
+                .logout()
+//              .logoutSuccessUrl("/logout");
+                .invalidateHttpSession(true)
+                .deleteCookies();
     }
 
     @Bean
