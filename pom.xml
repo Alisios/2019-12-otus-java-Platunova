@@ -24,6 +24,7 @@
         <module>hw12-webServer</module>
         <module>hw04-Instrumentation</module>
         <module>hw13-DI</module>
+        <module>hw09-ORM</module>
 
     </modules>
 
