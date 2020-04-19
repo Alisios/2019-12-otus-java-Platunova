@@ -1,6 +1,5 @@
 package ru.otus.orm.jdbc.helpers;
 
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,13 +31,13 @@ class JdbcMapperTest {
     @Test
     @DisplayName("корректно формировать значения всех полей вне зависимости от входного класса")
     void correctlyFormValuesOfClassParameters() {
-        assertLinesMatch(List.of("1", String.valueOf(new JsonPrimitive((String)"Женя")), "29"), jdbcMapper.getParams(user1));
-        assertLinesMatch(List.of("3", String.valueOf(new JsonPrimitive((String)"Боб")), "29"), jdbcMapper.getParams(user2));
-        assertLinesMatch(List.of("3", String.valueOf(new JsonPrimitive((String)"funny")), "41"), jdbcMapper.getParams(account));
-        assertLinesMatch(List.of("5", String.valueOf(new JsonPrimitive((String)"sad")), "29"), jdbcMapper.getParams(account2));
+        assertLinesMatch(List.of("1", "Женя", "29"), jdbcMapper.getParams(user1));
+        assertLinesMatch(List.of("3", "Боб", "29"), jdbcMapper.getParams(user2));
+        assertLinesMatch(List.of("3", "funny", "41"), jdbcMapper.getParams(account));
+        assertLinesMatch(List.of("5","sad", "29"), jdbcMapper.getParams(account2));
     }
 
-    @Test
+    @Test //не знаю как проверять
     void createObjectFromResultSet() {
     }
 

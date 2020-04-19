@@ -94,9 +94,6 @@ public class JdbcMapper <T> {
             case "java.lang.Character":
                 return Collections.singletonList(String.valueOf(new JsonPrimitive((Character) obj)));
 
-            case "java.lang.String":
-                return Collections.singletonList(String.valueOf(new JsonPrimitive((String) obj)));
-
             default:
                 return Collections.singletonList(obj.toString());
         }

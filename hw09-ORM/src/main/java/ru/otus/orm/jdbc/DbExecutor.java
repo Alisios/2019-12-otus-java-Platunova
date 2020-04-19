@@ -32,6 +32,20 @@ public class DbExecutor<T> {
     }
   }
 
+  public void updateRecord(Connection connection, String sql, long id, List<String> params) throws SQLException {
+    Savepoint savePoint = connection.setSavepoint("savePointName");
+    try (PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+      for (int idx=1; idx < params.size(); idx++) {
+        pst.setString(idx, params.get(idx));
+      }
+      pst.setLong(  params.size(), id);
+      pst.executeUpdate();
+    } catch (SQLException ex) {
+      connection.rollback(savePoint);
+      logger.error(ex.getMessage(), ex);
+      throw ex;
+    }
+  }
 
   public Optional<T> selectRecord(Connection connection, String sql, long id, Function<ResultSet, T> rsHandler) throws SQLException {
     try (PreparedStatement pst = connection.prepareStatement(sql)) {

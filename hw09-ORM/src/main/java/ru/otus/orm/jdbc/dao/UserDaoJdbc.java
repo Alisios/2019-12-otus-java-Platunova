@@ -25,7 +25,7 @@ public class UserDaoJdbc <T>  implements UserDao <T> {
   @Override
   public Optional<T> findById(long id, Class clazz) {
     try {
-      return Optional.ofNullable(userDaoJdbcTemplate.load(id, clazz));
+      return userDaoJdbcTemplate.load(id, clazz);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }

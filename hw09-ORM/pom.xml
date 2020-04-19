@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+<!--    <parent>-->
         <groupId>ru.otus</groupId>
-        <artifactId>OtusJavaHW</artifactId>
+<!--        <artifactId>OtusJavaHW</artifactId>-->
         <version>2019-12-SNAPSHOT</version>
-    </parent>
+<!--    </parent>-->
 
 
     <artifactId>hw09-ORM</artifactId>
@@ -99,6 +99,12 @@
             <version>1.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj-core.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

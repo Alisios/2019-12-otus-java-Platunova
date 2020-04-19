@@ -11,6 +11,7 @@ import ru.otus.orm.jdbc.sessionmanager.SessionManagerJdbc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     private static Logger logger = LoggerFactory.getLogger(UserDaoJdbc.class);
@@ -20,6 +21,7 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     private final JdbcMapper jdbcMapper;
     private final CreateSqlStatement createSqlStatement ;
     private final List<Long> cachedUsersId = new ArrayList<>();
+    private long id;
 
     public UserDaoJdbcTemplate(SessionManagerJdbc sessionManager, DbExecutor<T> dbExecutor, JdbcMapper jdbcMapper,CreateSqlStatement createSqlStatement) {
         this.sessionManager = sessionManager;
@@ -42,7 +44,8 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
 
     @Override
     public void createOrUpdate(T objectData){
-        if (cachedUsersId.contains(jdbcMapper.getId(objectData)))
+        id = jdbcMapper.getId(objectData);
+        if (cachedUsersId.contains(id))
             update(objectData);
         else
             create(objectData);
@@ -51,19 +54,20 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     @Override
     public void update(T objectData)  {
         try {
-            dbExecutor.insertRecord(sessionManager.getCurrentSession().getConnection(),
-                    createSqlStatement.getSqlStatement(objectData.getClass(),"update"),
+            dbExecutor.updateRecord(sessionManager.getCurrentSession().getConnection(),
+                    createSqlStatement.getSqlStatement(objectData.getClass(),"update"), id,
                     jdbcMapper.getParams(objectData));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
         }
 }
-    @SuppressWarnings("unchecked")
+
+   @SuppressWarnings("unchecked")
     @Override
-    public T load(long id, Class clazz) {
+    public Optional <T> load(long id, Class clazz) {
         try {
-            return  (T) dbExecutor.selectRecord(sessionManager.getCurrentSession().getConnection(),
+            return   dbExecutor.selectRecord(sessionManager.getCurrentSession().getConnection(),
                     createSqlStatement.getSqlStatement(clazz,"select"), id, resultSet -> {
             try {
                 if (resultSet.next()) {
