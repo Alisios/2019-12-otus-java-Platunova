@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import ru.otus.orm.api.annotations.Id;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -23,7 +25,8 @@ public class JdbcMapper <T> {
 
     public  T createObjectFromResultSet (ResultSet resultSet, Class <T> clazz) {
        try {
-           T resObject = (T) clazz.newInstance();
+           Constructor<T> constructor = clazz.getDeclaredConstructor();
+           T resObject= constructor.newInstance();
            Field[] fields = clazz.getDeclaredFields();
            for (Field f : fields) {
                var objFieldValue = resultSet.getObject(f.getName());
@@ -33,11 +36,13 @@ public class JdbcMapper <T> {
            return resObject;
        }
        catch (IllegalAccessException | InstantiationException e){
-           logger.error("Problems with creation object from clazz " + clazz.getSimpleName() + ": "
+           logger.error("Problems with creation object from clazz {} : {}" + clazz.getSimpleName()
                    + Arrays.toString(e.getStackTrace()));
        } catch (SQLException e){
-           logger.error("Impossible to load the object from Database because there is names with fields of "+
-                   clazz.getSimpleName() + " in the table>" +e.getMessage());
+           logger.error("Impossible to load the object from Database because there is names with fields of {} in the table {}"+
+                   clazz.getSimpleName() +e.getMessage());
+       } catch (NoSuchMethodException | InvocationTargetException e) {
+           e.printStackTrace();
        }
         return null;
     }
@@ -52,7 +57,7 @@ public class JdbcMapper <T> {
                     return Long.parseLong(String.valueOf(f.get(obj)));
                 }
                 else
-                    throw new JdbcMapperException("There is no id field in class "+ obj.getClass().getSimpleName());
+                    throw new JdbcMapperException("There is no id field in class {}"+ obj.getClass().getSimpleName());
             }
     } catch (IllegalAccessException e){
          logger.error(Arrays.toString(e.getStackTrace()));

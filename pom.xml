@@ -21,10 +21,11 @@
 
     <modules>
         <module>maven</module>
+        <module>hw09-ORM</module>
         <module>hw12-webServer</module>
         <module>hw04-Instrumentation</module>
         <module>hw13-DI</module>
-        <module>hw09-ORM</module>
+        <module>hw14-jmm</module>
 
     </modules>
 
