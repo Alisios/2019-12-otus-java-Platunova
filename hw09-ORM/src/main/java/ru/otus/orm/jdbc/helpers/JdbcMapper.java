@@ -13,9 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class JdbcMapper <T> {
+public class JdbcMapper <T> implements Mapper <T> {
     private static Logger logger = LoggerFactory.getLogger(JdbcMapper.class);
 
+    @Override
     public List<String> getParams(T obj)  {
         if (obj == null){
             return Collections.EMPTY_LIST;
@@ -23,6 +24,7 @@ public class JdbcMapper <T> {
         return chooseMethodForString(obj);
     }
 
+    @Override
     public  T createObjectFromResultSet (ResultSet resultSet, Class <T> clazz) {
        try {
            Constructor<T> constructor = clazz.getDeclaredConstructor();
@@ -36,33 +38,33 @@ public class JdbcMapper <T> {
            return resObject;
        }
        catch (IllegalAccessException | InstantiationException e){
-           logger.error("Problems with creation object from clazz {} : {}" + clazz.getSimpleName()
-                   + Arrays.toString(e.getStackTrace()));
+           logger.error("Problems with creation object from clazz {} : {}" , clazz.getSimpleName(),
+                    Arrays.toString(e.getStackTrace()));
        } catch (SQLException e){
-           logger.error("Impossible to load the object from Database because there is names with fields of {} in the table {}"+
-                   clazz.getSimpleName() +e.getMessage());
+           logger.error("Impossible to load the object from Database because there is names with fields of {} in the table {}",
+                   clazz.getSimpleName(), e.getMessage());
        } catch (NoSuchMethodException | InvocationTargetException e) {
            e.printStackTrace();
        }
         return null;
     }
 
-
-    public long getId(T obj)  {
+    @Override
+    public  Optional<Long> getId(T obj)  {
         Field[] fields = obj.getClass().getDeclaredFields();
         try{
             for (Field f : fields) {
                 if (f.isAnnotationPresent(Id.class)) {
                     f.setAccessible(true);
-                    return Long.parseLong(String.valueOf(f.get(obj)));
+                    return Optional.of(Long.parseLong(String.valueOf(f.get(obj))));
                 }
                 else
-                    throw new JdbcMapperException("There is no id field in class {}"+ obj.getClass().getSimpleName());
+                    throw new JdbcMapperException("There is no id field in class "+ obj.getClass().getSimpleName());
             }
     } catch (IllegalAccessException e){
          logger.error(Arrays.toString(e.getStackTrace()));
     }
-        return 0;
+        return Optional.empty();
     }
 
     private List<String> chooseMethodForString(Object obj) {
@@ -89,7 +91,7 @@ public class JdbcMapper <T> {
             }
         }
         catch (Exception e){
-            System.out.println(e.getCause()+" in " + this.getClass().getName());
+            logger.error(" Exception {} in {}",e.getCause(), this.getClass().getName());
         }
         return arrayList;
     }

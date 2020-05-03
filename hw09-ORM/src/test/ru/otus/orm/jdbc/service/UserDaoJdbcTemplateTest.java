@@ -2,6 +2,9 @@ package ru.otus.orm.jdbc.service;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.orm.api.model.Account;
 import ru.otus.orm.api.model.User;
@@ -19,6 +22,8 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,64 +39,45 @@ class UserDaoJdbcTemplateTest {
         createSqlStatement = new CreateSqlStatement();
         dataSource = new DataSourceH2();
     }
-
-    @Test
-    @DisplayName("корректно создавать, загружать и обновлять User")
-    void createLoadAndUpdateUsersCorrectly() throws Exception {
-
+    @BeforeAll
+    static void setUp2() throws SQLException {
+        DataSource dataSource = new DataSourceH2();
         createTableUser(dataSource);
+        createTableAccount(dataSource);
+    }
+
+    @DisplayName("корректно создавать, загружать и обновлять User")
+    @ParameterizedTest
+    @MethodSource("generateData")
+    void createLoadAndUpdateUsersCorrectly(User user, int id) throws Exception {
         SessionManagerJdbc sessionManager = new SessionManagerJdbc(dataSource);
         DbExecutor<User> dbExecutor = new DbExecutor<>();
         UserDaoJdbcTemplate<User> userDaoJdbcTemplate = new UserDaoJdbcTemplate<>(sessionManager, dbExecutor,jdbcMapper, createSqlStatement);
         UserDaoJdbc<User> userDao = new UserDaoJdbc<>(sessionManager, userDaoJdbcTemplate);
-
         DBServiceUser<User> dbServiceUser = new DbServiceUserImpl<>(userDao);
-        User user1 = new User(1, "Женя", 29);
-        User user2 = new User(2, "Вадим", 37);
-        User user3 =  new User(3, "Костя", 30);
-        User user4 = new User(4, "Джон", 43);
-
-        dbServiceUser.saveUser(user1);
-        dbServiceUser.saveUser(user2);
-        dbServiceUser.saveUser(user3);
-        dbServiceUser.saveUser(user4);
-
-        assertEquals(user1,  dbServiceUser.getUser(1, User.class).get());
-        assertEquals(user2,  dbServiceUser.getUser(2, User.class).get());
-        assertEquals(user3,  dbServiceUser.getUser(3, User.class).get());
-        assertEquals(user4,  dbServiceUser.getUser(4, User.class).get());
-        user1.setAge(30);
-        dbServiceUser.saveUser(user1);
-        assertEquals(user1,  dbServiceUser.getUser(1, User.class).get());
+        dbServiceUser.saveUser(user);
+        assertEquals(user,  dbServiceUser.getUser(id, User.class).get());
+        user.setAge(33);
+        dbServiceUser.saveUser(user);
+        assertEquals(user,  dbServiceUser.getUser(id, User.class).get());
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("generateDataAccount")
     @DisplayName("корректно создавать, загружать и обновлять Account")
-    void createLoadAndUpdateAccountsCorrectly() throws Exception {
-        createTableAccount(dataSource);
+    void createLoadAndUpdateAccountsCorrectly(Account account, int id) throws Exception {
         SessionManagerJdbc sessionManager = new SessionManagerJdbc(dataSource);
         DbExecutor<Account> dbExecutor = new DbExecutor<>();
         UserDaoJdbcTemplate<Account> userDaoJdbcTemplate = new UserDaoJdbcTemplate<>(sessionManager, dbExecutor,jdbcMapper, createSqlStatement);
         UserDaoJdbc<Account> userDao = new UserDaoJdbc<>(sessionManager, userDaoJdbcTemplate);
 
         DBServiceUser<Account> dbServiceUser = new DbServiceUserImpl<>(userDao);
-        var user1 = new Account(1, "Тип1", new BigDecimal(11));
-        var user2 = new Account(2, "Тип2", new BigDecimal(22));
-        var user3 =  new Account(3, "Тип3", new BigDecimal(33));
-        var user4 = new Account(4, "Тип4", new BigDecimal(44));
+        dbServiceUser.saveUser(account);
 
-        dbServiceUser.saveUser(user1);
-        dbServiceUser.saveUser(user2);
-        dbServiceUser.saveUser(user3);
-        dbServiceUser.saveUser(user4);
-
-        assertEquals(user1,  dbServiceUser.getUser(1, Account.class).get());
-        assertEquals(user2,  dbServiceUser.getUser(2, Account.class).get());
-        assertEquals(user3,  dbServiceUser.getUser(3, Account.class).get());
-        assertEquals(user4,  dbServiceUser.getUser(4, Account.class).get());
-        user1.setRest(new BigDecimal(30));
-        dbServiceUser.saveUser(user1);
-        assertEquals(user1,  dbServiceUser.getUser(1, Account.class).get());
+        assertEquals(account,  dbServiceUser.getUser(id, Account.class).get());
+        account.setRest(new BigDecimal(30));
+        dbServiceUser.saveUser(account);
+        assertEquals(account,  dbServiceUser.getUser(id, Account.class).get());
     }
 
     private static void createTableUser(DataSource dataSource) throws SQLException {
@@ -100,10 +86,25 @@ class UserDaoJdbcTemplateTest {
             pst.executeUpdate();
         }
     }
-    private void createTableAccount(DataSource dataSource) throws SQLException {
+    private static void createTableAccount(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement pst = connection.prepareStatement("create table Account(no bigint(20) NOT NULL auto_increment, type varchar(255), rest number)")) {
             pst.executeUpdate();
         }
+    }
+
+    private static Stream<Arguments> generateData() {
+        return Stream.of(
+                Arguments.of(new User(1, "Женя", 29), 1),
+                Arguments.of(new User(2, "Вадим", 37), 2),
+                Arguments.of(new User(3, "Джон", 43), 3),
+                Arguments.of(new User(4, "Костя", 30), 4));
+    }
+    private static Stream<Arguments> generateDataAccount() {
+        return Stream.of(
+                Arguments.of(new Account(1, "Тип1", new BigDecimal(11)),1),
+                Arguments.of(new Account(2, "Тип2", new BigDecimal(22)),2),
+                Arguments.of(new Account(3, "Тип3", new BigDecimal(33)),3),
+                Arguments.of(new Account(4, "Тип4", new BigDecimal(44)),4));
     }
 }

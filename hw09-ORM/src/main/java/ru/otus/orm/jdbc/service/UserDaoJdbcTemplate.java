@@ -20,7 +20,7 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     private final CreateSqlStatement<T> createSqlStatement ;
     private final Map<Class, List> cachedUsersId = new HashMap<>();
     private final List<Long> cachedUsersIdlist = new ArrayList<>();
-    private long id;
+    private Optional <Long> id;
 
     public UserDaoJdbcTemplate(SessionManagerJdbc sessionManager, DbExecutor<T> dbExecutor, JdbcMapper<T> jdbcMapper,CreateSqlStatement<T> createSqlStatement) {
         this.sessionManager = sessionManager;
@@ -46,7 +46,7 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     public void createOrUpdate(T objectData){
         id = jdbcMapper.getId(objectData);
         Class clazz = objectData.getClass();
-        if (cachedUsersId.containsKey(clazz) && (cachedUsersId.get(clazz).contains(id)))
+        if (cachedUsersId.containsKey(clazz) && (cachedUsersId.get(clazz).contains(id.orElseThrow())))
                 update(objectData);
         else
             create(objectData);
@@ -56,7 +56,7 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     public void update(T objectData)  {
         try {
             dbExecutor.updateRecord(sessionManager.getCurrentSession().getConnection(),
-                    createSqlStatement.getSqlStatement((Class<T>) objectData.getClass(),"update"), id,
+                    createSqlStatement.getSqlStatement((Class<T>) objectData.getClass(),"update"), id.get(),
                     jdbcMapper.getParams(objectData));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -77,7 +77,7 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
             catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
-            return (T)Optional.empty();
+            return null;
           });
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

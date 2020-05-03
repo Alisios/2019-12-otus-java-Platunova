@@ -44,11 +44,11 @@ class JdbcMapperTest {
     @DisplayName("находить поле отмеченное аннотацией id  вне зависимости от входного класса")
     @Test
     void correctlyGetIdField() {
-        assertEquals(1,jdbcMapper.getId(user1));
-        assertEquals(3,jdbcMapper.getId(account));
-        assertEquals(3,jdbcMapper.getId(user2));
-        assertEquals(5,jdbcMapper.getId(account2));
+        assertEquals(1L,jdbcMapper.getId(user1).get());
+        assertEquals(3L,jdbcMapper.getId(account).get());
+        assertEquals(3L,jdbcMapper.getId(user2).get());
+        assertEquals(5L,jdbcMapper.getId(account2).get());
         user1.setId(7);
-        assertEquals(7,jdbcMapper.getId(user1));
+        assertEquals(7L,jdbcMapper.getId(user1).get());
     }
 }
