@@ -61,13 +61,11 @@ public class FrontendLauncher {
 
         System.getProperties().put( "proxySet", "true" );
         System.getProperties().put( "socksProxyHost", "127.0.0.1" );
-       // System.getProperties().put( "socksProxyPort", "1567" );
         System.getProperties().put( "socksProxyPort", "9150" );
-       // http://127.0.0.1:1567/
 
         ticket_bot.botConnect();
 
-        Thread.sleep(120_000);
+        Thread.sleep(240_000);
         frontendLauncher.shutDownFrontend();
         Thread.sleep(2_000);
     }
@@ -109,7 +107,7 @@ public class FrontendLauncher {
                         else if (fromBack.getMessageType().getValue().equals(MessageType.NOTIFY.getValue())){
                             telegramService.sendNotifyingMsg(fromBack);
                         }
-                        logger.info("The message {} is  sent to User! Ehuu!", Serializers.deserialize(fromBack.getPayload(), String.class));
+                        logger.info("The message {} is  sent to User!", Serializers.deserialize(fromBack.getPayload(), String.class));
 
                     } finally {
                         channelConsumer.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -166,10 +164,6 @@ public class FrontendLauncher {
 
     private BlockingQueue<MessageModel> getMessageQueue(){
         return messageQueue;
-    }
-
-    private TelegramService getTelegramService(){
-        return telegramService;
     }
 }
 

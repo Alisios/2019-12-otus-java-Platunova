@@ -1,7 +1,5 @@
 
 package ru.otus.helpers;
-import ru.otus.telegramApi.CallbackType;
-
 import java.io.Serializable;
 import java.util.Objects;
 

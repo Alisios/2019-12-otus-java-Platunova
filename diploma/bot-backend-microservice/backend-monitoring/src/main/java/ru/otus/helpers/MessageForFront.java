@@ -1,7 +1,5 @@
 
 package ru.otus.helpers;
-import ru.otus.telegramApi.CallbackType;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -77,7 +75,7 @@ public class MessageForFront extends MessageModel implements Serializable {
                 ", numberOfEvents=" + numberOfEvents +
                 ", callbackType=" + callbackType +
                 ", message Type=" + super.getMessageType() +
-                // ", message payload=" + Arrays.toString(super.getPayload()) +
+               // ", message payload=" + Arrays.toString(super.getPayload()) +
                 '}';
     }
 }

@@ -1,15 +1,12 @@
 package ru.otus.telegramApi;
 
-import org.hibernate.engine.internal.ImmutableEntityEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import ru.otus.helpers.MessageForFront;
-import ru.otus.helpers.MessageModel;
 import ru.otus.helpers.Serializers;
 
 import java.util.ArrayList;
@@ -34,8 +31,6 @@ public class TelegramServiceImpl implements  TelegramService {
     @Override
     public void sendMsg(MessageForFront message){
 
-//        try{
-//            lock1.lock();
             SendMessage sendMessage = new SendMessage();
             sendMessage.enableMarkdown(true);
             sendMessage.setChatId(message.getChatId());//в какой конкрентный чат отпарвить ответ
@@ -61,18 +56,10 @@ public class TelegramServiceImpl implements  TelegramService {
                 //добавить обработку слишком длинных сообщений
             }
         }
-//        finally {
-//            lock1.unlock();
-//        }
-//    }
 
     @Override
     public void sendMsgQuery(MessageForFront message){
         try {
-//            lock2.lock();
-//            try {
-
-
             SendMessage sendMessage = new SendMessage();
             sendMessage.enableMarkdown(true);
             sendMessage.setChatId(message.getChatId());//в какой конкрентный чат отпарвить ответ
@@ -87,12 +74,9 @@ public class TelegramServiceImpl implements  TelegramService {
 //                        .setText(Serializers.deserialize(message.getPayload(), String.class));
                 bot.execute(sendMessage);//}
             } catch (TelegramApiException e) {
-                logger.error("TelegramApiException in SendQuerry message");
+                logger.error("TelegramApiException in SendQuery message");
                 e.printStackTrace();
             }
-//        }finally {
-//            lock2.unlock();
-//        }
     }
 
     @Override
