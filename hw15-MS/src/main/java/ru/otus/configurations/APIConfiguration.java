@@ -20,7 +20,7 @@ public class APIConfiguration {
     }
 
     @Bean(initMethod = "initiateUsers")
-    public InitialUsersService userCreator(DBServiceUser dbServiceUser) {
-        return new InitialUsersService(dbServiceUser);
+    public InitialUsersService userCreator() {
+        return new InitialUsersService();
     }
 }

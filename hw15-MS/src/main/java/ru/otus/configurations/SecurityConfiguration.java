@@ -36,7 +36,6 @@ private UserAuthorisationService userDetailsService;
                 .formLogin()
                 .and().sessionManagement().disable()
                 .logout()
-//              .logoutSuccessUrl("/logout");
                 .invalidateHttpSession(true)
                 .deleteCookies();
     }

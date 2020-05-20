@@ -1,7 +1,4 @@
 package ru.otus.backend.handlers;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.otus.api.model.User;
 import ru.otus.backend.db.service.DBServiceUser;
@@ -13,7 +10,6 @@ import ru.otus.messagesystem.RequestHandler;
 import java.util.Optional;
 
 public class SaveUserRequestHandler implements RequestHandler {
-    private static final Logger logger = LoggerFactory.getLogger(SaveUserRequestHandler.class);
     private final DBServiceUser dbService;
     private PasswordEncoder passwordEncoder;
 
@@ -30,5 +26,4 @@ public class SaveUserRequestHandler implements RequestHandler {
         User userSaved = dbService.getUser(id).get();
         return Optional.of(new Message(msg.getTo(), msg.getFrom(), msg.getId(), MessageType.SAVE_USER.getValue(), Serializers.serialize(userSaved)));
     }
-
-    }
+}

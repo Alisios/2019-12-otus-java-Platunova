@@ -32,7 +32,6 @@ public class UserDaoHibernate implements UserDao {
         }
     };
 
-
     public UserDaoHibernate(SessionManagerHibernate sessionManager) {
         this.sessionManager = sessionManager;
         cache.addListener(listener);

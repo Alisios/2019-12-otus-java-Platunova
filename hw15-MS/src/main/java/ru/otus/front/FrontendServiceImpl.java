@@ -2,11 +2,6 @@ package ru.otus.front;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
 import ru.otus.api.model.User;
 import ru.otus.messagesystem.Message;
 import ru.otus.messagesystem.MessageType;
@@ -19,8 +14,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-@Service
-@PropertySource(ignoreResourceNotFound = true, value = "app.properties")
 public class FrontendServiceImpl implements FrontendService {
     private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
@@ -28,8 +21,7 @@ public class FrontendServiceImpl implements FrontendService {
     private final MsClient msClient;
     private final String backendServiceClientName;
 
-    public FrontendServiceImpl(@Value("${backendServiceClientName}") String backendServiceClientName,
-                               @Qualifier("frontendMsClient") @Lazy MsClient msClient) {
+    public FrontendServiceImpl(String backendServiceClientName,  MsClient msClient) {
         this.msClient = msClient;
         this.backendServiceClientName = backendServiceClientName;
     }

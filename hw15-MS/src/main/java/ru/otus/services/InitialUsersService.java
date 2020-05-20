@@ -6,11 +6,8 @@ import ru.otus.backend.db.service.DBServiceUser;
 
 public class InitialUsersService {
 
+    @Autowired
     DBServiceUser dbServiceUser;
-
-    public InitialUsersService(DBServiceUser dbServiceUser){
-        this.dbServiceUser=dbServiceUser;
-    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
