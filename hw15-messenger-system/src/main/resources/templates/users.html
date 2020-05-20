@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Пользователи</title>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/js/App.js"></script>
+</head>
+
+<form class="form-inline">
+    <div class="form-group">
+        <label for="connect">Подключить соединение по вебсокетам:</label>
+        <button id="connect"  type="submit">Подключить</button>
+        <button id="disconnect"  type="submit" disabled="disabled">Отключить
+        </button>
+    </div>
+</form>
+
+<body>
+<h4>СТРАНИЦА АДМИНИСТРАТОРА</h4>
+<div class="top">
+<img src="img/pic.png" style="width: 300px; height: 250px">
+ <style type="text/css">
+    .row::before{-webkit-border-radius:3px;-moz-border-radius:3px;-webkit-box-shadow:#959595 0 2px 5px;-moz-box-shadow:#959595 0 2px 5px;border-radius:3px;box-shadow:#959595 0 2px 5px;content:"";display:block;height:100%;left:0;padding:2px 0 0;position:absolute;top:0;width:100%;}
+     .row:active::before{padding:1px 0 0;}
+     .row{-moz-box-shadow:inset 0 0 0 1px #63ad0d;-webkit-box-shadow:inset 0 0 0 1px #63ad0d;-moz-border-radius:3px;-webkit-border-radius:3px;background:#eee;background:-webkit-gradient(linear, 0 0, 0 bottom, from(#eee), to(#e2e2e2));background:-moz-linear-gradient(#eee, #e2e2e2);background:linear-gradient(#eee, #e2e2e2);border:solid 1px #d0d0d0;border-bottom:solid 3px #b2b1b1;border-radius:3px;box-shadow:inset 0 0 0 1px #f5f5f5;color:#555;display:inline-block;font:bold 16px Arial, Helvetica, Clean, sans-serif;margin:auto;padding:10px 50px;position:relative;text-align:center;text-decoration:none;text-shadow:0 1px 0 #fafafa;}
+     .row:hover{background:#e4e4e4;background:-webkit-gradient(linear, 0 0, 0 bottom, from(#e4e4e4), to(#ededed));background:-moz-linear-gradient(#e4e4e4, #ededed);background:linear-gradient(#e4e4e4, #ededed);border:solid 1px #c2c2c2;border-bottom:solid 3px #b2b1b1;box-shadow:inset 0 0 0 1px #efefef;}
+     .row:active{background:#dfdfdf;background:-webkit-gradient(linear, 0 0, 0 bottom, from(#dfdfdf), to(#e3e3e3));background:-moz-linear-gradient(#dfdfdf, #e3e3e3);background:linear-gradient(#dfdfdf, #e3e3e3);border:solid 1px #959595;box-shadow:inset 0 10px 15px 0 #c4c4c4;top:2px;}
+     .row{background-color:#9fd6fa;background:-webkit-gradient(linear, 0 0, 0 bottom, from(#9fd6fa), to(#6bb9f7));background:-moz-linear-gradient(#9fd6fa, #6bb9f7);background:linear-gradient(#9fd6fa, #6bb9f7);border:solid 1px #72bdf4;border-bottom:solid 3px #4a9de1;box-shadow:inset 0 0 0 1px #bfe4fc;color:#fff;text-shadow:0 1px 0 #4598f3;}
+     .row:hover{background-color:#6bb9f7;background:-webkit-gradient(linear, 0 0, 0 bottom, from(#6bb9f7), to(#9fd6fa));background:-moz-linear-gradient(#6bb9f7, #9fd6fa);background:linear-gradient(#6bb9f7, #9fd6fa);border:solid 1px #72bdf4;border-bottom:solid 3px #4a9de1;box-shadow:inset 0 0 0 1px #bfe4fc;}
+     .row:active{background-color:#6bb9f7;background:-webkit-gradient(linear, 0 0, 0 bottom, from(#6bb9f7), to(#9fd6fa));background:-moz-linear-gradient(#6bb9f7, #9fd6fa);background:linear-gradient(#6bb9f7, #9fd6fa);border:solid 1px #72bdf4;box-shadow:inset 0 10px 15px 0 #50aaf3;}
+
+    table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: center;
+    }
+    th, td:first-child {
+    background: #AFCDE7;
+    color: white;
+    padding: 10px 20px;
+    }
+    th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+    }
+    td {
+    background: #D8E6F3;
+    }
+    th:first-child, td:first-child {
+    text-align: left;
+    }
+</style>
+
+
+<h4>Список всех пользователей: </h4>
+<table style="width: 400px" id = "list">
+    <thead>
+    <tr>
+    <tr>
+        <td style="font-weight:bold; color: white;  background: #AFCDE7">Id</td>
+        <td style="font-weight:bold; color: white; background: #AFCDE7">Имя</td>
+        <td style="font-weight:bold; color: white; background: #AFCDE7">Возраст</td>
+        <td style="font-weight:bold; color: white; background: #AFCDE7">Логин</td>
+        <td style="font-weight:bold; color: white; background: #AFCDE7">Пароль</td>
+    </tr>
+    </tr>
+    </thead>
+    <tbody id = "tableOfUsers">
+    </tr>
+    </tbody>
+</table>
+
+    <form id="create-form" th:method="post" accept-charset="utf-8">
+        <label>
+            Введите имя пользователя <br/>
+            <input type="text" name="name" id="nameUser" >
+        </label>
+        <br/>
+        <label>
+            Введите возраст<br/>
+            <input type="number" name="age" id = "ageUser">
+        </label>
+        <br/>
+        <label>
+            Введите логин<br/>
+            <input type="text" name="login" id = "loginUser">
+        </label>
+        <br/>
+        <label>
+            Введите пароль<br/>
+            <input type="password" name="password" id = "passwordUser">
+        </label>
+        <br/><br/>
+        <button class="row" onclick="saveUser()" type="submit">Создать пользователя</button>
+    </form>
+
+    <br/>
+    <a th:href="@{/logout}">Выйти из системы</a>
+
+</div>
+</body>
+</html>
