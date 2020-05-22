@@ -3,8 +3,6 @@ package ru.otus.configurations;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -18,18 +16,24 @@ import ru.otus.front.handlers.SaveUserDataResponseHandler;
 import ru.otus.messagesystem.*;
 
 @Configuration
-@ComponentScan(basePackages = { "ru.otus" })
-@PropertySource(ignoreResourceNotFound = true, value = "app.properties")
 public class MessageSystemConfig {
 
-    @Autowired
-    private DBServiceUser dbServiceUser;
+    final private DBServiceUser dbServiceUser;
+    final private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    MessageSystemConfig(DBServiceUser dbServiceUser,PasswordEncoder passwordEncoder){
+        this.dbServiceUser = dbServiceUser;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Bean(destroyMethod = "dispose")
+    MessageSystem messageSystem () {
+        return new MessageSystemImpl();
+    }
 
     @Bean
-    MsClient backendMsClient(MessageSystem messageSystem, @Value("${backendServiceClientName}") String backendServiceClientName) {
+    MsClient backendMsClient(MessageSystem messageSystem, @Value("service.backendServiceClientName") String backendServiceClientName) {
         final MsClient backendMsClient = new MsClientImpl(backendServiceClientName, messageSystem);
         backendMsClient.addHandler(MessageType.GET_USERS, new GetUsersDataRequestHandler(this.dbServiceUser));
         backendMsClient.addHandler(MessageType.SAVE_USER, new SaveUserRequestHandler(this.dbServiceUser, this.passwordEncoder));
@@ -38,12 +42,12 @@ public class MessageSystemConfig {
     }
 
     @Bean
-    MsClient frontendMsClient ( @Value("${frontendServiceClientName}") final String frontendServiceClientName, MessageSystem messageSystem){
+    MsClient frontendMsClient ( @Value("service.frontendServiceClientName") final String frontendServiceClientName, MessageSystem messageSystem){
         return new MsClientImpl(frontendServiceClientName, messageSystem);
     }
 
     @Bean
-    FrontendService frontendService( @Value("${backendServiceClientName}") final String backendServiceClientName , MessageSystem messageSystem, MsClient frontendMsClient) {
+    FrontendService frontendService( @Value("service.backendServiceClientName") final String backendServiceClientName , MessageSystem messageSystem, MsClient frontendMsClient) {
         FrontendService frontendService = new FrontendServiceImpl(backendServiceClientName, frontendMsClient);
         frontendMsClient.addHandler(MessageType.GET_USERS, new GetUserDataResponseHandler(frontendService));
         frontendMsClient.addHandler(MessageType.SAVE_USER, new SaveUserDataResponseHandler(frontendService));

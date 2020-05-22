@@ -19,17 +19,18 @@ public class UsersController {
     public UsersController(SimpMessagingTemplate template, FrontendService frontendService)  {
         this.template = template;
         this.frontendService = frontendService;
-
     }
 
     @GetMapping({"/users"})
+    public String view() { return "users.html"; }
+
+
     @MessageMapping({"/users"})
-    public String view() {
+    public void viewWS() {
         frontendService.getUsers(users -> {
             logger.info("message from DB is received: {}", users);
             template.convertAndSend("/topic/users", users);
         });
-        return "users.html";
     }
 
     @MessageMapping("/create")

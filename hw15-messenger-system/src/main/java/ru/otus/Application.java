@@ -2,11 +2,12 @@ package ru.otus;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import ru.otus.configurations.ConfigProperties;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "ru.otus" })
+@EnableConfigurationProperties(ConfigProperties.class)
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

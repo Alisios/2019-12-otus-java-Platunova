@@ -1,13 +1,11 @@
 package ru.otus.api.cachehw;
-
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-@Component
+@Service
 public class MyCache<K, V> implements HwCache<K, V> {
   final private Map<K, V> cache = new WeakHashMap<>();
   private final List<HwListener <K,V>> listeners = new ArrayList<>();

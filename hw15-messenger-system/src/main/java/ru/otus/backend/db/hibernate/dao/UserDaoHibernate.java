@@ -5,11 +5,11 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.otus.api.cachehw.HwCache;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.dao.UserDaoException;
 import ru.otus.api.model.User;
 import ru.otus.api.cachehw.HwListener;
-import ru.otus.api.cachehw.MyCache;
 import ru.otus.backend.db.hibernate.sessionmanager.DatabaseSessionHibernate;
 import ru.otus.backend.db.hibernate.sessionmanager.SessionManagerHibernate;
 import ru.otus.backend.db.sessionmanager.SessionManager;
@@ -20,10 +20,8 @@ import java.util.*;
 @Repository
 public class UserDaoHibernate implements UserDao {
     private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
-
     private final SessionManagerHibernate sessionManager;
-
-    private MyCache<String, User> cache = new MyCache<>();
+    private final HwCache<String, User> cache;
 
     private final HwListener<String, User> listener = new HwListener<String, User>() {
         @Override
@@ -32,8 +30,9 @@ public class UserDaoHibernate implements UserDao {
         }
     };
 
-    public UserDaoHibernate(SessionManagerHibernate sessionManager) {
+    public UserDaoHibernate(SessionManagerHibernate sessionManager, HwCache<String, User> cache) {
         this.sessionManager = sessionManager;
+        this.cache = cache;
         cache.addListener(listener);
     }
 

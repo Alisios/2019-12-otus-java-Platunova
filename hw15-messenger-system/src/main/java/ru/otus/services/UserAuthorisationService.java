@@ -1,6 +1,7 @@
 package ru.otus.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,16 +18,13 @@ public class UserAuthorisationService implements UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException
     {
-        ru.otus.api.model.User user = dbServiceUser.getUser(login).orElse(null);
-        if(user == null) {
-            throw new UsernameNotFoundException("User is not found");
-        }
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getName())
-                .password(user.getPassword())
-                .authorities(user.getLogin().equals("admin") ? "ADMIN" : "USER")
-                .accountExpired(false)
-                .credentialsExpired(false)
-                .build();
+        return dbServiceUser.getUser(login)
+                .map(u -> User.withUsername(u.getName())
+                        .password(u.getPassword())
+                        .authorities(u.getLogin().equals("admin") ? "ADMIN" : "USER")
+                        .accountExpired(false)
+                        .credentialsExpired(false)
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User is not found"));
     }
 }
