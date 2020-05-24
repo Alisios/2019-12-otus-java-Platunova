@@ -12,8 +12,12 @@ import ru.otus.backend.db.service.DBServiceUser;
 @Service
 public class UserAuthorisationService implements UserDetailsService
 {
+    private final DBServiceUser dbServiceUser;
+
     @Autowired
-    private DBServiceUser dbServiceUser;
+    UserAuthorisationService(DBServiceUser dbServiceUser){
+        this.dbServiceUser = dbServiceUser;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException

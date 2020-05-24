@@ -7,10 +7,10 @@ import ru.otus.backend.db.service.DBServiceUser;
 public class InitialUsersService {
 
     @Autowired
-    DBServiceUser dbServiceUser;
+    private  DBServiceUser dbServiceUser;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private  PasswordEncoder passwordEncoder;
 
     public void initiateUsers(){
         dbServiceUser.saveUser(new User( 1L,"Вася",27, "vas",  passwordEncoder.encode("11111")));

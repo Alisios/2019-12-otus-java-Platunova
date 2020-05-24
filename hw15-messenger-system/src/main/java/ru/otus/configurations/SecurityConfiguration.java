@@ -15,9 +15,12 @@ import ru.otus.services.UserAuthorisationService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    private final UserAuthorisationService userDetailsService;
 
-@Autowired
-private UserAuthorisationService userDetailsService;
+    @Autowired
+    SecurityConfiguration(UserAuthorisationService userDetailsService){
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public void configure(WebSecurity web) {
