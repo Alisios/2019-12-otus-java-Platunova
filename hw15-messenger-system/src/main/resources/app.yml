@@ -1,0 +1,3 @@
+service:
+  frontendServiceClientName: frontendServiceClientName
+  backendServiceClientName: backendServiceClientName
