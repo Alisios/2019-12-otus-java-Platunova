@@ -1,15 +1,17 @@
 package ru.otus.configurations;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+
 @ConfigurationProperties(prefix = "service")
+@Component
 public class ConfigProperties {
 
-    private  String frontendServiceClientName ;
+    private String frontendServiceClientName ;
 
-    private   String backendServiceClientName;
+    private  String backendServiceClientName;
+
 
     public String getFrontendServiceClientName() {
         return frontendServiceClientName;

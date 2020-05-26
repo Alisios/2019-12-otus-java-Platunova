@@ -26,8 +26,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-class FrontendServiceImplTest {
-    private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImplTest.class);
+class MessageSystemImplTest {
+    private static final Logger logger = LoggerFactory.getLogger(MessageSystemImplTest.class);
 
     private static final String FRONTEND_SERVICE_CLIENT_NAME = "frontendService";
     private static final String DATABASE_SERVICE_CLIENT_NAME = "databaseService";

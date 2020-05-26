@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Тест проверяет:")
 @WebMvcTest(UsersController.class)
-class UsersControllerTest {
+class UserAuthorisationServiceTest {
 
     @MockBean
     private FrontendService frontendService;
