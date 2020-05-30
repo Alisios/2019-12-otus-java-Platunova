@@ -1,0 +1,18 @@
+service:
+  frontendServiceClientName: frontendServiceClientName
+  backendServiceClientName: backendServiceClientName
+
+hibernate:
+  dialect: org.hibernate.dialect.H2Dialect
+  show_sql: true
+  hbm2ddl.auto: create
+  generate_statistics: true
+  connection:
+    enable_lazy_load_no_trans: false
+
+jdbc:
+  driverClassName : org.h2.Driver
+  url: jdbc:h2:mem:OtusExamplesDB;DB_CLOSE_DELAY=-1
+  username: sa
+  password: sa
+
