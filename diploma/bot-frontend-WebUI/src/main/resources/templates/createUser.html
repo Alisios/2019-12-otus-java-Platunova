@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Создать пользователя</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/js/App.js"></script>
+</head>
+<script>
+    window.onload = connect;
+</script>
+
+
+<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+<div class="top">
+    <style type="text/css">
+        .bot1::before {
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-box-shadow: #959595 0 2px 5px;
+            -moz-box-shadow: #959595 0 2px 5px;
+            border-radius: 3px;
+            box-shadow: #959595 0 2px 5px;
+            content: "";
+            display: block;
+            height: 100%;
+            left: 0;
+            padding: 2px 0 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        .bot1:active::before {
+            padding: 1px 0 0;
+        }
+
+        .bot1 {
+            -moz-box-shadow: inset 0 0 0 1px #63ad0d;
+            -webkit-box-shadow: inset 0 0 0 1px #63ad0d;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            background: #eee;
+            background: -webkit-gradient(linear, 0 0, 0 bottom, from(#eee), to(#e2e2e2));
+            background: -moz-linear-gradient(#eee, #e2e2e2);
+            background: linear-gradient(#eee, #e2e2e2);
+            border: solid 1px #d0d0d0;
+            border-bottom: solid 3px #b2b1b1;
+            border-radius: 3px;
+            box-shadow: inset 0 0 0 1px #f5f5f5;
+            color: #555;
+            display: inline-block;
+            font: bold 16px Arial, Helvetica, Clean, sans-serif;
+            margin: 25px;
+            padding: 10px 50px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0 1px 0 #fafafa;
+        }
+
+        .bot1:hover {
+            background: #e4e4e4;
+            background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e4e4e4), to(#ededed));
+            background: -moz-linear-gradient(#e4e4e4, #ededed);
+            background: linear-gradient(#e4e4e4, #ededed);
+            border: solid 1px #c2c2c2;
+            border-bottom: solid 3px #b2b1b1;
+            box-shadow: inset 0 0 0 1px #efefef;
+        }
+
+        .bot1:active {
+            background: #dfdfdf;
+            background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dfdfdf), to(#e3e3e3));
+            background: -moz-linear-gradient(#dfdfdf, #e3e3e3);
+            background: linear-gradient(#dfdfdf, #e3e3e3);
+            border: solid 1px #959595;
+            box-shadow: inset 0 10px 15px 0 #c4c4c4;
+            top: 2px;
+        }
+
+    </style>
+    <h4>Создать нового пользователя:</h4>
+
+    <form id="create-form" th:method="post" accept-charset="utf-8">
+
+        <!--        <div class="form-group">-->
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label> ChatId
+                    <input type="number" class="form-control" name="chatId" id="chatId" placeholder="chatId">
+                </label>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>Исполнитель
+                    <input type="text" class="form-control" name="concert.artist" id="artist" placeholder="artist">
+                </label>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>Дата проведения
+                    <input type="text" class="form-control" name="concert.date" id="date" placeholder="date">
+                </label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+
+                <label>Место проведения
+                    <input type="text" class="form-control" name="concert.place" id="place" placeholder="place">
+                </label>
+            </div>
+            <div class="form-group col-md-4">
+                <label>
+                    URL мероприятия
+                    <input type="text" class="form-control" name="concert.concertUrl" id="concertUrl" placeholder="URL">
+                </label>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>
+                    Дата окончания мониторинга
+                    <input type="date" class="form-control" name="dateOfMonitorFinish" id="dateOfMonitorFinish" placeholder="date">
+                </label>
+            </div>
+        </div>
+<br/><br/>
+<button class="bot1" onclick="saveUser()" type="submit">Создать пользователя</button>
+<br/><br/>
+</form>
+</div>
+</body>
+</html>

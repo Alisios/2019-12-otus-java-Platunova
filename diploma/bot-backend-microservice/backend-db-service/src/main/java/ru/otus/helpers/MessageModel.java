@@ -15,6 +15,9 @@ public class MessageModel implements Serializable {
 
     private  byte[] payload;
 
+
+    public MessageModel(){};
+
     public MessageModel(MessageType messageType, byte[] payload) {
         this.messageType = messageType;
         this.payload = payload;

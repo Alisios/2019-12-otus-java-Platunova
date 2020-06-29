@@ -1,5 +1,6 @@
 
 package ru.otus.helpers;
+
 import ru.otus.telegramApi.CallbackType;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ public class MessageForFront extends MessageModel implements Serializable {
     private int numberOfEvents = 0;
     private String callbackType = CallbackType.HELLO.getValue();
 
-    public MessageForFront(MessageType messageType, byte[] payload,long chatId, int messageId) {
+    public MessageForFront(MessageType messageType, byte[] payload, long chatId, int messageId) {
         super(messageType, payload);
         this.chatId = chatId;
         this.messageId = messageId;

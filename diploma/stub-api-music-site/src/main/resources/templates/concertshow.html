@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Концерты</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <h2>Описание концерта</h2>
+    <div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Concert Id:</label>
+                <div class="col-sm-10">
+                    <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+                    <p class="form-control-static" th:text="${concert.id}">Concert Id</p></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Исполнитель:</label>
+                <div class="col-sm-10">
+                    <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+                    <p class="form-control-static" th:text="${concert.artist}">Artist</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Дата:</label>
+                <div class="col-sm-10">
+                    <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+                    <p class="form-control-static" th:text="${concert.date}">Concert date</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Место проведения:</label>
+                <div class="col-sm-10">
+                    <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+                    <p class="form-control-static" th:text="${concert.place}">Concert place</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Url:</label>
+                <div class="col-sm-10">
+                    <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+                    <p class="form-control-static" th:text="${concert.concertUrl}">Concert url</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Билеты:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" th:text="${concert.ticketsToString}">Tickets</p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

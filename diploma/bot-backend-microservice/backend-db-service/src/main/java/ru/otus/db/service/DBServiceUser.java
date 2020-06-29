@@ -6,12 +6,13 @@ import java.util.Optional;
 
 public interface DBServiceUser   {
 
-  long saveUser(User user);
+  User saveUser(User user);
 
   Optional<User> getUser(long id);
   Optional<User> findByChatIdAndArtist(User user);
   List<User> getAllUsers();
   List<User> getUsersForNotifying();
-  Optional<User> delete (long id);
+  void delete (long id);
+  void deleteAllUsers();
 
 }

@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public enum MessageType implements Serializable {
     DELETE_USER("deleteUser"),
+    DELETE_USER_BY_ADMIN("deleteUserByAdmin"),
     SAVE_USER("saveUser"),
+    SAVE_USER_BY_ADMIN("saveUserByAdmin"),
     GET_USERS("getAllUsers"),
     NOTIFY("notify"),
     GET_MONITORING_RESULT("monitoring"),

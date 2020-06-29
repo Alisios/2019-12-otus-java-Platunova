@@ -7,13 +7,13 @@ import java.util.Objects;
 public class MessageModel implements Serializable {
     private static final long serialVersionUID = 6529685098267757695L;
 
-    private MessageType messageType ;
+    private MessageType messageType;
 
     public void setPayload(byte[] payload) {
         this.payload = payload;
     }
 
-    private  byte[] payload;
+    private byte[] payload;
 
     public MessageModel(MessageType messageType, byte[] payload) {
         this.messageType = messageType;

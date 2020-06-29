@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Мероприятия</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(concerts)}">
+        <h2>Список мероприятий</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Исполнитель</th>
+                <th>Дата</th>
+                <th>Место</th>
+                <th>URL</th>
+                <th>Билеты</th>
+                <th>Посмотреть</th>
+                <th>Внести изменения</th>
+            </tr>
+
+            <tr th:each="concert : ${concerts}">
+                <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+                <td th:text="${concert.id}"><a href="/concert/${concert.id}">Id</a></td>
+                <td th:text="${concert.artist}">Исполнитель</td>
+                <td th:text="${concert.date}">Дата</td>
+                <td th:text="${concert.place}">Место</td>
+                <td th:text="${concert.concertUrl}">URL</td>
+                <td th:text="${concert.ticketsToString}">Билеты</td>
+                <td><a th:href="${ '/concert/' + concert.id}">View</a></td>
+                <td><a th:href="${'/concert/edit/' + concert.id}">Edit</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

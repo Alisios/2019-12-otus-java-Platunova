@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Список пользователей</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/js/App.js"></script>
+</head>
+
+<!--<form class="form-inline">-->
+<!--    <div class="form-group">-->
+<!--        <label for="connect">Подключить соединение по вебсокетам:</label>-->
+<!--        <button id="connect"  type="submit">Подключить</button>-->
+<!--        <button id="disconnect"  type="submit" disabled="disabled">Отключить-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</form>-->
+
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <style type="text/css">
+        .buttom {
+            display: inline-block;
+            font-family: arial,sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            color: rgb(68,68,68);
+            text-decoration: none;
+            user-select: none;
+            padding: .2em 1.2em;
+            outline: none;
+            border: 1px solid rgba(0,0,0,.1);
+            border-radius: 2px;
+            background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+            transition: all .218s ease 0s;
+        }
+        .buttom:hover {
+            color: rgb(24,24,24);
+            border: 1px solid rgb(198,198,198);
+            background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+            box-shadow: 0 1px 2px rgba(0,0,0,.1);
+        }
+        .bottom:active {
+            color: rgb(51,51,51);
+            border: 1px solid rgb(204,204,204);
+            background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+            box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+        }
+    </style>
+
+<h4>Список всех пользователей: </h4>
+ <table class="table table-striped" style="width: 400px" id = "list">
+        <td style="font-weight:bold; color: white;  background: #696969">Id</td>
+        <td style="font-weight:bold; color: white; background: #696969">chatId</td>
+        <td style="font-weight:bold; color: white; background: #696969">Название исполнителя</td>
+        <td style="font-weight:bold; color: white; background: #696969">Место проведения мероприятия</td>
+        <td style="font-weight:bold; color: white; background: #696969">Дата проведения мероприятия</td>
+        <td style="font-weight:bold; color: white; background: #696969">Ссылка на мероприятие</td>
+        <td style="font-weight:bold; color: white; background: #696969">Ключ актуальности мониторинга</td>
+        <td style="font-weight:bold; color: white; background: #696969">Билеты появились?</td>
+        <td style="font-weight:bold; color: white; background: #696969">Ключ истечения срока годности</td>
+        <td style="font-weight:bold; color: white; background: #696969">Дата окончания мониторинга</td>
+        <td style="font-weight:bold; color: white; background: #696969">Сформированнй текст (при наличии)</td>
+    </tr>
+    </thead>
+    <tbody id = "tableOfUsers">
+    </tr>
+    </tbody>
+</table>
+
+    <form id="delete-form"  th:method="post" accept-charset="utf-8">
+        <h4> Удалить пользователя по id: </h4>
+        <label>
+            Введите Id для удаления: <br/>
+            <input type="number" name="id" id = "deleteId">
+        </label>
+
+        <br/><br/>
+        <button class="bottom" onclick="deleteUser()" type="button">Удалить пользователя</button>
+    </form>
+
+    <br/>  <br/>
+    <a th:href="@{/logout}">Выйти из системы</a>
+
+    <script>
+        window.onload=connect;
+    </script>
+
+
+</div>
+</body>
+</html>

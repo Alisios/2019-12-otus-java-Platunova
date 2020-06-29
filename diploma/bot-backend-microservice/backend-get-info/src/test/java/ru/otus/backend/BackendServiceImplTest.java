@@ -2,156 +2,137 @@ package ru.otus.backend;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Message;
-import ru.otus.backend.eventApi.Concert;
-import ru.otus.backend.eventApi.helpers.HtmlParser;
-import ru.otus.backend.eventApi.helpers.HtmlParserKassirRu;
+import ru.otus.backend.eventApi.EventException;
+import ru.otus.backend.eventApi.MonitoredEvent;
+import ru.otus.helpers.MessageModel;
+import ru.otus.helpers.MessageType;
 import ru.otus.helpers.Serializers;
 
-import java.util.stream.Stream;
+import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
-
-@DisplayName("Тесты проверяют: ")
 class BackendServiceImplTest {
-    final private String COMMAND = "/";
-    final private String NOTHING = "NOTHING";
-    final private String NOTIFY = "NOTIFY";
-    final private String NO = "NO";
-    private HtmlParser htmlParser = new HtmlParserKassirRu();
-    private Concert monitoredEvent = new Concert(htmlParser);
-    private BackendServiceImpl backendServiceImpl = new BackendServiceImpl(monitoredEvent);
 
-    @ParameterizedTest
-    @DisplayName("корректное отображение информации о событии в BackendService")
-    @ValueSource(strings = {"TWENTY ØNE PILØTS", "Элизиум"})
-    void correctlyShowEventInformationFromBackendService(String strings) {
-        Message message = mock(Message.class);
-        given(message.getText()).willReturn(strings);
-        given( message.getMessageId()).willReturn(1);
-        given( message.getChatId()).willReturn(1L);
-        String res = Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class);
-        System.out.println(res);
-        assertNotNull(res);
-        assertTrue(res.contains(strings));
-    }
+    private final MonitoredEvent monitoredEvent = mock(MonitoredEvent.class);
+    private final BackendService backendService = new BackendServiceImpl(monitoredEvent);
+    private final Message message = mock(Message.class, withSettings().serializable());
+    private final CallbackQuery callbackQuery = mock(CallbackQuery.class, withSettings().serializable());
+    private final MessageModel messageModel = mock(MessageModel.class, withSettings().serializable());
 
+
+    @DisplayName("корректно реагирует на сообщение с запросом")
     @Test
-    @DisplayName("корректный ответ на команды от пользователя")
-    void correctlyShowNoInfoFromBackendService() {
-        Message message = mock(Message.class);
-        given(message.getText()).willReturn("sdjfbajsbjkg;kjg");
-        given( message.getMessageId()).willReturn(1);
-        given( message.getChatId()).willReturn(1L);
-        assertEquals("Концерты по запрашиваемому исполнителю не найдены",Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
+    void correctlyHandleNotCommandMessage() throws IOException {
+        when(message.getText()).thenReturn("ABC");
+        backendService.getEventData(message);
+        verify(monitoredEvent, times(1)).getConcertInfo(message);
     }
 
+    @DisplayName("корректно реагирует на сообщение типа команда")
     @Test
-    @DisplayName("корректный ответ на неподходящий лист событий")
-    void correctlyReactOnCallbackQueryNothing(){
-        Message message = mock(Message.class);
-        given(message.getText()).willReturn("beatles");
-        given( message.getMessageId()).willReturn(1);
-        given( message.getChatId()).willReturn(1L);
-        backendServiceImpl.getEventData(message);
-        CallbackQuery callbackQuery = spy(new CallbackQuery());//Message.class);
-        given(callbackQuery.getMessage()).willReturn(message);
-        given( message.getMessageId()).willReturn(2);
-        given(callbackQuery.getData()).willReturn(NOTHING);
-        assertEquals(Serializers.deserialize(backendServiceImpl.getTicketData(callbackQuery).getPayload(), String.class),  "Очень жаль! Обращайтесь еще!");
-        }
+    void correctlyHandleCommandMessage() throws IOException {
+        when(message.getText()).thenReturn("/ABC");
+        backendService.getEventData(message);
+        verify(monitoredEvent, times(0)).getConcertInfo(message);
+    }
 
+
+    @DisplayName("корректно реагирует на исключения типа IOException ")
     @Test
-    @DisplayName("корректный ответ на нежелание пользователя на мониторинг")
-    void correctlyReactOnCallbackQueryNo(){
-        Message message = mock(Message.class);
-        given(message.getText()).willReturn("кис кис");
-        given( message.getMessageId()).willReturn(1);
-        given( message.getChatId()).willReturn(1L);
-        backendServiceImpl.getEventData(message);
-        CallbackQuery callbackQuery = spy(new CallbackQuery());//Message.class);
-        given(callbackQuery.getData()).willReturn("0");
-        given(callbackQuery.getMessage()).willReturn(message);
-         String s = "1) Исполнитель: кис-кис\n" +
-                 "Дата: 24 Июньср 20:00\n" +
-                 "Место проведения: ГЛАВCLUB GREEN CONCERT\n" +
-                 "Ссылка: https://msk.kassir.ru/koncert/glavclub-green-concert/kis-kis_2020-06-24\n" +
-                 "Билетов на танцпол и фанзону нет.\n" +
-                 "Минимальная стоимость билетов в другие зоны составляет: 4500, максимальная: 4500." +
-                 "2) Исполнитель: кис-кис\n" +
-                "Дата: 24 Июньср 20:00\n" +
-                "Место проведения: ГЛАВCLUB GREEN CONCERT\n" +
-                "Ссылка: https://msk.kassir.ru/koncert/glavclub-green-concert/kis-kis_2020-06-24\n" +
-                "Билетов на танцпол и фанзону нет.\n" +
-                "Минимальная стоимость билетов в другие зоны составляет: 4500, максимальная: 4500." ;
-        given(message.getText()).willReturn(s);
-        assertTrue(Serializers.deserialize(backendServiceImpl.getTicketData(callbackQuery).getPayload(), String.class).contains("Хотите отслеживать появление билетов"));
-        given(callbackQuery.getData()).willReturn(NOTIFY);
-        assertEquals(Serializers.deserialize(backendServiceImpl.getTicketData(callbackQuery).getPayload(), String.class),  "Хорошо! Я сообщу, если появятся билеты в фанзону или танцевальный партер!");
-        given(callbackQuery.getData()).willReturn(NO);
-        assertEquals(Serializers.deserialize(backendServiceImpl.getTicketData(callbackQuery).getPayload(), String.class),  "Обращайтесь еще!");
+    void correctlyReactOnIOException() throws IOException {
+        when(message.getText()).thenReturn("ABC");
+        doThrow(new IOException("")).when(monitoredEvent).getConcertInfo(message);
+        assertThrows(IOException.class, () -> {
+            backendService.getEventData(message);
+        });
     }
 
-//    @Test
-//    @DisplayName("корректный ответ на желание пользователя на мониторинг и правильное функционирование всех функций с учетом меняющихся messageId")
-//    void correctlyReactOnCallbackQueryNotify(){
-//        Message message = mock(Message.class);
-//        given(message.getText()).willReturn("кис кис");
-//        given( message.getMessageId()).willReturn(1);
-//        given( message.getChatId()).willReturn(1L);
-//        backendServiceImpl.getEventData(message);
-//     //   assertNotNull(monitoredEvent.getCacheMap().get(message.getChatId()));
-//     //   assertTrue(monitoredEvent.getCacheMap().get(message.getChatId()).containsKey(1));
-//        CallbackQuery callbackQuery = spy(new CallbackQuery());//Message.class);
-//        // CallbackQuery callbackQuery = mock(CallbackQuery.class);
-//        given( message.getMessageId()).willReturn(2);
-//        given(callbackQuery.getData()).willReturn("0");
-//        given(callbackQuery.getMessage()).willReturn(message);
-//        assertTrue(Serializers.deserialize(backendServiceImpl.getTicketData(callbackQuery).getPayload(), String.class).contains("Хотите отслеживать появление билетов"));
-//      //  assertFalse(monitoredEvent.getCacheMap().get(message.getChatId()).containsKey(1));
-//      //  assertTrue(monitoredEvent.getCacheMap().get(message.getChatId()).containsKey(2));
-//        given(callbackQuery.getData()).willReturn(NOTIFY);
-//        given( message.getMessageId()).willReturn(3);
-//     ///   assertEquals(Serializers.deserialize(backendServiceImpl.getTicketData(callbackQuery).getPayload(), String.class),  "Хорошо! Я сообщу, если появятся билеты в фанзону или танцевальный партер!");
-//       // assertNotNull(monitoredEvent.getCacheMap().get(message.getChatId()));
-//    }
-
+    @DisplayName("корректно реагирует на исключения типа RuntimeException ")
     @Test
-    @DisplayName("корректный ответ на команды от пользователя")
-    void correctlyShowCommandInfoFromBackendService() {
-        final String unknown = "Неизвестная команада. Для начала работы введите имя исполнителя. Имя не должно начинаться со знака '/'.";
-        Message message = mock(Message.class);
-        given(message.getText()).willReturn("/start");
-        given( message.getMessageId()).willReturn(1);
-        given( message.getChatId()).willReturn(1L);
-        assertEquals("Привет! Я найду билеты на любой концерт! Введите исполнителя!",Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
-        given(message.getText()).willReturn("/help");
-        assertEquals("Это бот для поиска билетов на концерт. Для начала работы введите имя исполнителя. " +
-                "Имя не должно начинаться со знака '/'.", Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
-        given(message.getText()).willReturn("/shglsahdgf");
-        assertEquals( unknown, Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
-        given(message.getText()).willReturn("/Элизиум");
-        assertEquals(unknown, Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
-        given(message.getText()).willReturn("/ Элизиум");
-        assertEquals(unknown, Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
-        given(message.getText()).willReturn(" / ");
-        assertEquals(unknown, Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
-        given(message.getText()).willReturn(" / Элизиум");
-        assertEquals(unknown, Serializers.deserialize(backendServiceImpl.getEventData(message).getPayload(), String.class));
+    void correctlyReactOnRuntimeException() throws IOException {
+        when(message.getText()).thenReturn("ABC");
+        doThrow(new RuntimeException("")).when(monitoredEvent).getConcertInfo(message);
+        Throwable thrown = assertThrows(EventException.class, () -> {
+            backendService.getEventData(message);
+        });
+        assertThat(thrown).hasMessageContaining("Error with handling message");
     }
 
-
-    private static Stream<Arguments> generateData() {
-        return Stream.of(
-                Arguments.of("NOTHING", "Очень жаль! Обращайтесь еще!"),
-                Arguments.of("NO", "Обращайтесь еще!"));
+    @DisplayName("корректно обрабатывает сообщения типа callbackQuery")
+    @Test
+    void correctlyHandleCallbackQuery() throws IOException {
+        when(callbackQuery.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn("ABC");
+        when(callbackQuery.getData()).thenReturn("NOTHING");
+        assertThat(Serializers.deserialize(backendService.getTicketData(callbackQuery).getPayload(), String.class)).contains("Очень жаль! Обращайтесь еще");
+        verify(monitoredEvent, times(0)).getTicketInfo(anyString(), anyInt());
     }
+
+    @DisplayName("корректно обрабатывает callbackQuery типа no")
+    @Test
+    void correctlyHandleCallbackQueryOfNoType() throws IOException {
+        when(callbackQuery.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn("ABC");
+        when(callbackQuery.getData()).thenReturn("NO");
+        assertThat(Serializers.deserialize(backendService.getTicketData(callbackQuery).getPayload(), String.class)).contains("Обращайтесь еще!");
+        verify(monitoredEvent, times(0)).getTicketInfo(anyString(), anyInt());
+    }
+
+    @DisplayName("корректно обрабатывает callbackQuery типа NOTIFY")
+    @Test
+    void correctlyHandleCallbackQueryOfNotifyType() throws IOException {
+        when(callbackQuery.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn("ABC");
+        when(callbackQuery.getData()).thenReturn("NOTIFY");
+        assertThat(Serializers.deserialize(backendService.getTicketData(callbackQuery).getPayload(), String.class)).contains("Хорошо! Я сообщу, если появятся билеты");
+        verify(monitoredEvent, times(0)).getTicketInfo(anyString(), anyInt());
+    }
+
+    @DisplayName("корректно обрабатывает callbackQuery типа NOTIFY")
+    @Test
+    void correctlyHandleCallbackQueryOfNumberType() throws IOException {
+        when(callbackQuery.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn("ABC");
+        when(callbackQuery.getData()).thenReturn("3");
+        when(monitoredEvent.getTicketInfo(anyString(), anyInt())).thenReturn("result");
+        backendService.getTicketData(callbackQuery);
+        verify(monitoredEvent, times(1)).getTicketInfo(anyString(), anyInt());
+    }
+
+    @DisplayName("корректно реагирует на исключения при обработке сообщения типа CallbackQuery")
+    @Test
+    void correctlyReactOnExceptionWhenHandlingCallbackQuery() throws IOException {
+        when(callbackQuery.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn("ABC");
+        when(callbackQuery.getData()).thenReturn("3");
+        when(monitoredEvent.getTicketInfo(anyString(), anyInt())).thenReturn("result");
+        doThrow(new RuntimeException()).when(monitoredEvent).getTicketInfo(anyString(), anyInt());
+        Throwable thrown = assertThrows(EventException.class, () -> {
+            backendService.getTicketData(callbackQuery);
+        });
+        assertThat(thrown).hasMessageContaining("Error with handling message");
+    }
+
+    @DisplayName("корректно формирует сообщение о внутренней ошибке пользователю ")
+    @Test
+    void correctlyFormErrorMessage()  {
+        when(messageModel.getMessageType()).thenReturn(MessageType.GET_EVENT_INFO);
+        when(messageModel.getPayload()).thenReturn(Serializers.serialize(message));
+        assertThat(backendService.errorMessage(messageModel).getMessageType().getValue()).isEqualTo(MessageType.NOTIFY.getValue());
+        assertThat(Serializers.deserialize(backendService.errorMessage(messageModel).getPayload(), String.class)).contains("Извините, запрос не может быть");
+    }
+
+    @DisplayName("корректно обрабатывает Exception, возникшие при формировании сообщения об ошибке")
+    @Test
+    void correctlyHandleExceptionWhenFormingErrorMessage()  {
+        when(messageModel.getMessageType()).thenReturn(MessageType.GET_EVENT_INFO);
+        when(messageModel.getPayload()).thenReturn(Serializers.serialize("message"));
+        assertThrows(EventException.class, () -> { backendService.errorMessage(messageModel); });
+    }
+
 }

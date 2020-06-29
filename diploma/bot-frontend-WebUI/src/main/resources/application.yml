@@ -1,0 +1,33 @@
+server:
+  port: 8030
+
+rabbitmq-properties:
+  username: guest
+  password: guest
+  host: localhost
+  channelCacheSizeMax: 8
+  connectionCacheSizeMax: 4
+  xMessageTtl: 240000
+  xDeadLettersExchange: dead_letters_exchange
+  xDeadLetterQueue: dead_letters_queue
+
+  dbExchange: db_exchange
+  backProducerExchange: back_producer_exchange
+  monitoringExchange: monitoring_exchange
+
+  frontProducerExchange: front_producer_exchange
+
+  dbQueue: db_queue
+  monitoringQueue: monitoring_queue
+  backProducerToWebQueue: back_producer_to_web_queue
+  backProduceQueue: back_producer_queue
+  frontProducerQueue: front_producer_queue
+  backProducerWebExchange: back_producer_web_exchange
+
+logging:
+  pattern: ${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{70}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+
+#  file: logs/mylog.log
+
+
+

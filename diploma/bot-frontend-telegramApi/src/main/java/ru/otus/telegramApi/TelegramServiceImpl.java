@@ -1,44 +1,57 @@
 package ru.otus.telegramApi;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.rabbitmq.client.MessageProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import ru.otus.configurations.RabbitMQProperties;
 import ru.otus.helpers.MessageForFront;
+import ru.otus.helpers.MessageModel;
 import ru.otus.helpers.Serializers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ *  формирование конечного собщения пользователю через telegram api
+ */
 
+@Service
+@Slf4j
 public class TelegramServiceImpl implements  TelegramService {
-    private static Logger logger = LoggerFactory.getLogger(TelegramServiceImpl.class);
     private Bot bot;
+    private final AmqpTemplate template;
+    private final RabbitMQProperties rabbitProperties;
 
-    final private Lock lock1 = new ReentrantLock();
-    final private Lock lock2 = new ReentrantLock();
-    final private Lock lock3 = new ReentrantLock();
+    @Autowired
+    public TelegramServiceImpl(AmqpTemplate template, RabbitMQProperties rabbitProperties) {
+        this.template = template;
+        this.rabbitProperties = rabbitProperties;
+    }
 
-    public TelegramServiceImpl(Bot bot){
+    public void setBot(Bot bot) {
         this.bot = bot;
     }
 
-    @Override
-    public void sendMsg(MessageForFront message){
 
+    @Override
+    public void sendMsg(MessageForFront message) throws TelegramApiException{
             SendMessage sendMessage = new SendMessage();
             sendMessage.enableMarkdown(true);
-            sendMessage.setChatId(message.getChatId());//в какой конкрентный чат отпарвить ответ
-            sendMessage.setReplyToMessageId(message.getMessageId());//на какое сообщение мы будем овтечать
+            sendMessage.setChatId(message.getChatId());
+            sendMessage.setReplyToMessageId(message.getMessageId());
             sendMessage.setText(Serializers.deserialize(message.getPayload(), String.class));
             sendMessage.setParseMode("HTML");
             try{
-                logger.info("TypeOfMessage in sendMsg {}",message.getCallbackType());
+                log.info("TypeOfMessage in sendMsg {}",message.getCallbackType());
                 if (message.getCallbackType().equals(CallbackType.LIST_OF_EVENTS.getValue())){
                     setInline(sendMessage, message.getNumberOfEvents());
                     bot.execute(sendMessage);
@@ -52,35 +65,32 @@ public class TelegramServiceImpl implements  TelegramService {
                 }
             }
             catch (TelegramApiException ex){
-                logger.info("TelegramApiException in Send message");
+                log.info("TelegramApiException in Send message {}\t {}\n {}",ex.getCause(), ex.getMessage(), Arrays.toString(ex.getStackTrace()));
+                throw new TelegramApiException ("The message from sendMsg is not sent to user"+ex.getCause()+". "+ ex.getMessage());
                 //добавить обработку слишком длинных сообщений
             }
         }
 
     @Override
-    public void sendMsgQuery(MessageForFront message){
+    public void sendMsgQuery(MessageForFront message) throws TelegramApiException{
         try {
             SendMessage sendMessage = new SendMessage();
             sendMessage.enableMarkdown(true);
-            sendMessage.setChatId(message.getChatId());//в какой конкрентный чат отпарвить ответ
-            sendMessage.setReplyToMessageId(message.getMessageId());//на какое сообщение мы будем овтечать
+            sendMessage.setChatId(message.getChatId());
+            sendMessage.setReplyToMessageId(message.getMessageId());
             sendMessage.setText(Serializers.deserialize(message.getPayload(), String.class));
             sendMessage.setParseMode("HTML");
             if (message.getCallbackType().equals(CallbackType.IF_SHOULD_BE_MONITORED.getValue()))
                 setInlineNotify(sendMessage);
-//                EditMessageText new_message = new EditMessageText()
-//                        .setChatId(message.getChatId())
-//                        .setMessageId(Math.toIntExact(message.getMessageId()))
-//                        .setText(Serializers.deserialize(message.getPayload(), String.class));
                 bot.execute(sendMessage);//}
-            } catch (TelegramApiException e) {
-                logger.error("TelegramApiException in SendQuery message");
-                e.printStackTrace();
+            } catch (TelegramApiException ex) {
+                log.error("TelegramApiException in SendQuery message {}\n {}", ex.getCause(), ex.getMessage());
+                throw new TelegramApiException ("The message from sendMsgQuery is not sent to user"+ex.getCause()+". "+ ex.getMessage());
             }
     }
 
     @Override
-    public void sendNotifyingMsg(MessageForFront message){
+    public void sendNotifyingMsg(MessageForFront message) throws TelegramApiException {
 //        try {
 //            lock3.lock();
             SendMessage sendMessage = new SendMessage();
@@ -89,17 +99,13 @@ public class TelegramServiceImpl implements  TelegramService {
             sendMessage.setText(Serializers.deserialize(message.getPayload(), String.class));
             sendMessage.setParseMode("HTML");
             try {
-                logger.info("Event happens success of monitoring. Text: {}", Serializers.deserialize(message.getPayload(), String.class));
+                log.info("Success of monitoring. Text: {}", Serializers.deserialize(message.getPayload(), String.class));
                 bot.execute(sendMessage);
             } catch (TelegramApiException ex) {
-                logger.info("TelegramApiException in Send message");
-                //добавить обработку слишком длинных сообщений
+                log.error("TelegramApiException in Send Notify message {}", Arrays.toString(ex.getStackTrace()));
+                throw new TelegramApiException ("The message from sendNotifyingMsg is not sent to user"+ Arrays.toString(ex.getStackTrace()));
             }
         }
-//        finally {
-//            lock3.unlock();
-//        }
-//    }
 
     private void setInline(SendMessage sendMessage, int size) {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
@@ -119,5 +125,14 @@ public class TelegramServiceImpl implements  TelegramService {
         InlineKeyboardMarkup markupKeyboard = new InlineKeyboardMarkup();
         markupKeyboard.setKeyboard(rowList);
         sendMessage.setReplyMarkup(markupKeyboard);
+    }
+
+    @Override
+    public void sendMessageToRabbit(MessageModel msg){
+        template.convertAndSend(rabbitProperties.getFrontProducerExchange(),
+                rabbitProperties.getFrontProducerQueue(),
+                MessageBuilder.withBody(Serializers.serialize(msg))
+                        .setContentType(String.valueOf(MessageProperties.PERSISTENT_TEXT_PLAIN))
+                        .build());
     }
 }

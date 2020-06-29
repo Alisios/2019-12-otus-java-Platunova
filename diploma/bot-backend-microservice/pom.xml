@@ -19,6 +19,7 @@
         <module>backend-db-service</module>
         <module>backend-get-info</module>
         <module>backend-monitoring</module>
+        <module>backend-error-logging-service</module>
     </modules>
 
     <properties>

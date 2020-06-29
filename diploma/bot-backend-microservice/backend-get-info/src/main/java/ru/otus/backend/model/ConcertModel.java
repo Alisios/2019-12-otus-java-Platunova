@@ -1,10 +1,10 @@
 package ru.otus.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Cacheable
@@ -13,9 +13,8 @@ public class ConcertModel implements Serializable {
     private static final long serialVersionUID = 129348939L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)//(strategy = GenerationType.AUTO)//(strategy = GenerationType.IDENTITY)
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "concert_seq")
-    @Column(name = "id")//,unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
     @Column(name = "artist")
@@ -32,6 +31,9 @@ public class ConcertModel implements Serializable {
     @OneToOne(optional = false, mappedBy = "concert")//, cascade = CascadeType.ALL)// cascade = CascadeType.ALL)//,fetch = FetchType.EAGER, orphanRemoval = true)//)
     private User owner = new User (0,null, new Date());
 
+   // @Transient
+    private List <TicketModel> tickets = new ArrayList<>();
+
     public ConcertModel(){};
 
     public ConcertModel (String artist, String date, String place,String concertUrl){
@@ -40,6 +42,20 @@ public class ConcertModel implements Serializable {
         this.place = place;
         this.concertUrl = concertUrl;
     };
+
+    public ConcertModel (String artist, String date, String place,String concertUrl, List <TicketModel>  tickets){
+        this.artist = artist;
+        this.date = date;
+        this.place = place;
+        this.concertUrl = concertUrl;
+        this.tickets = tickets;
+    };
+
+    @JsonBackReference
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     public long getId() {
         return id;
     }
@@ -52,8 +68,14 @@ public class ConcertModel implements Serializable {
         return owner;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+
+
+    public List<TicketModel> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<TicketModel> tickets) {
+        this.tickets = tickets;
     }
 
     public String getArtist() {
@@ -118,8 +140,6 @@ public class ConcertModel implements Serializable {
         return "Исполнитель: " + artist + '\n' +
                 "Дата: " + date + '\n' +
                 "Место проведения: " + place + '\n' +
-                "Ссылка: " + concertUrl;//+ '\n';//+ '\n'+
-//                "ShouldBeMonitoreFlag " +shouldBeMonitored +
-//                ", id: " +id ;
+                "Ссылка: " + concertUrl;//+ '\n'+
     }
 }
