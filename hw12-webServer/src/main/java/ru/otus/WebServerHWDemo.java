@@ -17,10 +17,10 @@ import ru.otus.services.UserAuthServiceImpl;
 
 
 /**
- Класс демонстрирует работу сервера со страницей администратора.
- Стартовая страница: http://localhost:8080
- чтобы войти на страницу введите логин: admin, пароль: 11111
-**/
+ * Класс демонстрирует работу сервера со страницей администратора.
+ * Стартовая страница: http://localhost:8080
+ * чтобы войти на страницу введите логин: admin, пароль: 11111
+ **/
 public class WebServerHWDemo {
     private static final int WEB_SERVER_PORT = 8080;
     private static final String TEMPLATES_DIR = "/templates/";
@@ -37,7 +37,7 @@ public class WebServerHWDemo {
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
         UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
 
-        UsersWebServer usersWebServer = new UsersWebServerHW(WEB_SERVER_PORT,authService, dbServiceUser, templateProcessor);
+        UsersWebServer usersWebServer = new UsersWebServerHW(WEB_SERVER_PORT, authService, dbServiceUser, templateProcessor);
 
         usersWebServer.start();
         usersWebServer.join();
@@ -46,13 +46,13 @@ public class WebServerHWDemo {
         sessionFactory.close();
     }
 
-    static void initialUsers(DBServiceUser dbServiceUser){
-        dbServiceUser.saveUser(new User ( "Вася",27, "vas", "11111"));
+    static void initialUsers(DBServiceUser dbServiceUser) {
+        dbServiceUser.saveUser(new User("Вася", 27, "vas", "11111"));
         dbServiceUser.saveUser(new User("Женя", 29, "zhenya", "11111"));
-        dbServiceUser.saveUser(new User("Джон",30,  "admin", "11111"));
-        dbServiceUser.saveUser(new User ( "Боб",37, "bob", "bobpassword"));
+        dbServiceUser.saveUser(new User("Джон", 30, "admin", "11111"));
+        dbServiceUser.saveUser(new User("Боб", 37, "bob", "bobpassword"));
         dbServiceUser.saveUser(new User("Энтони", 19, "ent", "ent123"));
-        dbServiceUser.saveUser(new User ( "Рома",33, "poma", "12345"));
+        dbServiceUser.saveUser(new User("Рома", 33, "poma", "12345"));
         dbServiceUser.saveUser(new User("Саша", 35, "sashka", "12"));
         dbServiceUser.saveUser(new User("Эл", 28, "el123", "2222"));
     }

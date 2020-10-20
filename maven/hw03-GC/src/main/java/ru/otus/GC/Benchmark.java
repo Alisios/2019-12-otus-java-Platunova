@@ -6,11 +6,11 @@ class Benchmark implements BenchmarkMXBean {
     private final int loopCounter;
     private volatile int size = 0;
 
-    public Benchmark( int loopCounter ) {
+    public Benchmark(int loopCounter) {
         this.loopCounter = loopCounter;
     }
 
-    void run() throws InterruptedException {
+    void run()  {
         ArrayList<Integer> array = new ArrayList<>();
         array.add(3);
         array.add(6);
@@ -18,14 +18,14 @@ class Benchmark implements BenchmarkMXBean {
             int local = size;
             for (int i = 1; i < local; i++)
                 array.add(i);
-            if ((local-(local>>3)) > 1)
-                array.subList(1, (local-(local>>3))).clear();
+            if ((local - (local >> 3)) > 1)
+                array.subList(1, (local - (local >> 3))).clear();
         }
     }
 
     @Override
-    public void setSize( int size ) {
-        System.out.println( "new size:" + size );
+    public void setSize(int size) {
+        System.out.println("new size:" + size);
         this.size = size;
     }
 }

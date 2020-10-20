@@ -18,13 +18,13 @@ class JdbcMapperTest {
     private User user2;
     private Account account2;
     private Account account;
-    private JdbcMapper jdbcMapper = new JdbcMapper();
+    private final JdbcMapper jdbcMapper = new JdbcMapper();
 
     @BeforeEach
     void setUp() {
         user1 = new User(1, "Женя", 29);
         account = new Account(3, "funny", new BigDecimal(41));
-        user2= new User(3, "Боб", 29);
+        user2 = new User(3, "Боб", 29);
         account2 = new Account(5, "sad", new BigDecimal(29));
     }
 
@@ -34,21 +34,22 @@ class JdbcMapperTest {
         assertLinesMatch(List.of("1", "Женя", "29"), jdbcMapper.getParams(user1));
         assertLinesMatch(List.of("3", "Боб", "29"), jdbcMapper.getParams(user2));
         assertLinesMatch(List.of("3", "funny", "41"), jdbcMapper.getParams(account));
-        assertLinesMatch(List.of("5","sad", "29"), jdbcMapper.getParams(account2));
+        assertLinesMatch(List.of("5", "sad", "29"), jdbcMapper.getParams(account2));
     }
 
-    @Test //не знаю как проверять
+    @Test
+        //не знаю как проверять
     void createObjectFromResultSet() {
     }
 
     @DisplayName("находить поле отмеченное аннотацией id  вне зависимости от входного класса")
     @Test
     void correctlyGetIdField() {
-        assertEquals(1L,jdbcMapper.getId(user1).get());
-        assertEquals(3L,jdbcMapper.getId(account).get());
-        assertEquals(3L,jdbcMapper.getId(user2).get());
-        assertEquals(5L,jdbcMapper.getId(account2).get());
+        assertEquals(1L, jdbcMapper.getId(user1).get());
+        assertEquals(3L, jdbcMapper.getId(account).get());
+        assertEquals(3L, jdbcMapper.getId(user2).get());
+        assertEquals(5L, jdbcMapper.getId(account2).get());
         user1.setId(7);
-        assertEquals(7L,jdbcMapper.getId(user1).get());
+        assertEquals(7L, jdbcMapper.getId(user1).get());
     }
 }

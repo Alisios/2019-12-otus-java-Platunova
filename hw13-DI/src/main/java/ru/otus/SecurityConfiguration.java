@@ -15,11 +15,11 @@ import ru.otus.services.UserAuthorisationService;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackages = { "ru.otus" })
+@ComponentScan(basePackages = {"ru.otus"})
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-@Autowired
-private UserAuthorisationService userDetailsService;
+    @Autowired
+    private UserAuthorisationService userDetailsService;
 
     @Override
     public void configure(WebSecurity web) {
@@ -31,7 +31,7 @@ private UserAuthorisationService userDetailsService;
         http.csrf().disable()
                 .authorizeRequests().antMatchers("/index").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/users","/create").hasAuthority("ADMIN")
+                .authorizeRequests().antMatchers("/users", "/create").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
                 .and().sessionManagement().disable()
@@ -43,11 +43,12 @@ private UserAuthorisationService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return  new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
-   @Autowired
+    @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);;
+        auth.userDetailsService(userDetailsService);
+        ;
     }
 }

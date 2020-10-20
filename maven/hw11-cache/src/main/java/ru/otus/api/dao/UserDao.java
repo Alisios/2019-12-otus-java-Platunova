@@ -6,9 +6,9 @@ import ru.otus.api.sessionmanager.SessionManager;
 import java.util.Optional;
 
 public interface UserDao {
-  Optional<User> findById(long id);
+    Optional<User> findById(long id);
 
-  long saveUser(User user);
+    long saveUser(User user);
 
-  SessionManager getSessionManager();
+    SessionManager getSessionManager();
 }

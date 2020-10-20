@@ -38,9 +38,10 @@ class UserDaoSpringTest {
     static class UserDaoSpringTestConfig {
         @Bean
         public DBServiceUser dbServiceUser(UserDao userDao, HwCache<String, User> cache) {
-            return new DBServiceUserSpring(userDao,cache);
+            return new DBServiceUserSpring(userDao, cache);
         }
     }
+
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -53,9 +54,9 @@ class UserDaoSpringTest {
 
     @DisplayName("корректную работу с БД после подключения Transactional")
     @Test
-    void checkIfUserIsSavedInDBCorrectly(){
-         List<User> listOfUser2 =  new ArrayList<>(List.of(new User( 1L,"Вася",27, "vas",passwordEncoder.encode("11111")),
-                new User(2L,"Женя", 29, "zhenya",  passwordEncoder.encode("11111"))));
+    void checkIfUserIsSavedInDBCorrectly() {
+        List<User> listOfUser2 = new ArrayList<>(List.of(new User(1L, "Вася", 27, "vas", passwordEncoder.encode("11111")),
+                new User(2L, "Женя", 29, "zhenya", passwordEncoder.encode("11111"))));
         long id = dbServiceUser.saveUser(user);
         assertEquals(dbServiceUser.getUser(id).get(), user);
         user.setAge(546327);
@@ -65,13 +66,13 @@ class UserDaoSpringTest {
         user.setLogin("login233");
         dbServiceUser.saveUser(user);
         assertThat(dbServiceUser.getUser(id).get()).isEqualTo(user);
-        List <User> users = dbServiceUser.getAllUsers();
+        List<User> users = dbServiceUser.getAllUsers();
         assertThat(users.get(0).getLogin()).isEqualTo(listOfUser2.get(0).getLogin());
         assertThat(dbServiceUser.getUser(listOfUser2.get(1).getLogin()).get().getId()).isEqualTo(listOfUser2.get(1).getId());
 
         Throwable exception = assertThrows(NullPointerException.class, () -> {
             dbServiceUser.saveUser(null);
-            });
+        });
         Throwable exception2 = assertThrows(RuntimeException.class, () -> {
             dbServiceUser.getUser(-1213L);
         });

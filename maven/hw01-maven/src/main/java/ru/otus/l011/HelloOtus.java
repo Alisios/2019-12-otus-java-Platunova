@@ -11,19 +11,15 @@ import java.util.List;
 
 
 /**
- * Created by tully.
- *
- * Example for L01.1
- *
  * To start the application:
  * mvn package
  * java -jar ./L01-maven/target/L01-maven-jar-with-dependencies.jar
  * java -cp "./L01-maven/target/L01-maven.jar:${HOME}/.m2/repository/com/google/guava/guava/27.1-jre/guava-27.1-jre.jar" ru.otus.l011.Main
- *
+ * <p>
  * To unzip the jar:
  * unzip -l L01-maven.jar
  * unzip -l L01-maven-jar-with-dependencies.jar
- *
+ * <p>
  * To build:
  * mvn package
  * mvn clean compile
@@ -35,7 +31,7 @@ public class HelloOtus {
 
     public static void main(String... args) {
 
-        Multiset< String > wordsMultiset = HashMultiset.create();
+        Multiset<String> wordsMultiset = HashMultiset.create();
 
         wordsMultiset.add("Java");
         wordsMultiset.add("is");
@@ -45,8 +41,8 @@ public class HelloOtus {
         wordsMultiset.add("cool");
         System.out.println(wordsMultiset);
 
-        for (String word:Multisets.copyHighestCountFirst(wordsMultiset).elementSet())
-            System.out.println("Occurrences of "+ word + " : " + wordsMultiset.count(word));
+        for (String word : Multisets.copyHighestCountFirst(wordsMultiset).elementSet())
+            System.out.println("Occurrences of " + word + " : " + wordsMultiset.count(word));
 
         List<Integer> example = new ArrayList<>();
         int min = 0;
@@ -59,7 +55,6 @@ public class HelloOtus {
         List<Integer> result = new ArrayList<>();
         Collections.shuffle(example);
         calcTime(() -> result.addAll(Lists.reverse(example)));
-        //System.out.println(result);
     }
 
     private static void calcTime(Runnable runnable) {

@@ -30,12 +30,12 @@ public class UsersWebServerHW implements UsersWebServer {
     public UsersWebServerHW(int port,
                             UserAuthService authService,
                             DBServiceUser dbServiceUser,
-                           TemplateProcessor templateProcessor) {
+                            TemplateProcessor templateProcessor) {
 
-        this.dbServiceUser=dbServiceUser;
+        this.dbServiceUser = dbServiceUser;
         this.templateProcessor = templateProcessor;
         this.authService = authService;
-        this.port=port;
+        this.port = port;
         server = new Server(port);
 
     }

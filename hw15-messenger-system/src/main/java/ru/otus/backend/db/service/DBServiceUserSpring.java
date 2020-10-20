@@ -17,10 +17,10 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class DBServiceUserSpring implements DBServiceUser  {
+public class DBServiceUserSpring implements DBServiceUser {
     private static Logger logger = LoggerFactory.getLogger(DBServiceUserSpring.class);
 
-    private final UserDao userDao ;
+    private final UserDao userDao;
 
     private final HwCache<String, User> cache;
 
@@ -38,20 +38,20 @@ public class DBServiceUserSpring implements DBServiceUser  {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ,
-            rollbackFor = { DbServiceException.class, UserDaoException.class})
+            rollbackFor = {DbServiceException.class, UserDaoException.class})
     public long saveUser(User user) {
         long userId = userDao.saveUser(user);
-        cache.put(Long.toString(user.getId()),user);
+        cache.put(Long.toString(user.getId()), user);
         logger.info("created user: {}", userId);
         return userId;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, readOnly = true,
-            rollbackFor ={ DbServiceException.class, UserDaoException.class})
+            rollbackFor = {DbServiceException.class, UserDaoException.class})
     public Optional<User> getUser(long id) {
-        if (cache.getCache().containsKey(Long.toString(id))){
-          return Optional.ofNullable(cache.get(Long.toString(id)));
-        }else {
+        if (cache.getCache().containsKey(Long.toString(id))) {
+            return Optional.ofNullable(cache.get(Long.toString(id)));
+        } else {
             Optional<User> userOptional = userDao.findById(id);
             cache.put(Long.toString(id), userOptional.get());
             logger.info("user: {}", userOptional.orElse(null));
@@ -60,21 +60,21 @@ public class DBServiceUserSpring implements DBServiceUser  {
     }
 
 
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ,readOnly = true,
-            rollbackFor = { DbServiceException.class, UserDaoException.class})
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, readOnly = true,
+            rollbackFor = {DbServiceException.class, UserDaoException.class})
     public Optional<User> getUser(String login) {
-        for (User user :cache.getCache().values()){
+        for (User user : cache.getCache().values()) {
             if (user.getLogin().equals(login))
-            return Optional.ofNullable(cache.get(Long.toString(user.getId())));
+                return Optional.ofNullable(cache.get(Long.toString(user.getId())));
         }
         Optional userOptional = userDao.findByLogin(login);
         logger.info("user: {}", userOptional.orElse(null));
         return userOptional;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ,readOnly = true,
-            rollbackFor = { DbServiceException.class, UserDaoException.class})
-    public List <User> getAllUsers(){
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, readOnly = true,
+            rollbackFor = {DbServiceException.class, UserDaoException.class})
+    public List<User> getAllUsers() {
         List<User> users = userDao.findAllUser();
         users.forEach(user -> cache.put(Long.toString(user.getId()), user));
         logger.info("user: {}", users.toString());

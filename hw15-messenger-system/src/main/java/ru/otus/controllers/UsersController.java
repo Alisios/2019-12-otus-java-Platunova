@@ -16,13 +16,15 @@ public class UsersController {
     private final FrontendService frontendService;
     private final SimpMessagingTemplate template;
 
-    public UsersController(SimpMessagingTemplate template, FrontendService frontendService)  {
+    public UsersController(SimpMessagingTemplate template, FrontendService frontendService) {
         this.template = template;
         this.frontendService = frontendService;
     }
 
     @GetMapping({"/users"})
-    public String view() { return "users.html"; }
+    public String view() {
+        return "users.html";
+    }
 
 
     @MessageMapping({"/users"})

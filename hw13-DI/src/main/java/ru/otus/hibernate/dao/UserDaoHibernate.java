@@ -13,6 +13,7 @@ import ru.otus.api.cachehw.HwListener;
 import ru.otus.api.cachehw.MyCache;
 import ru.otus.hibernate.sessionmanager.DatabaseSessionHibernate;
 import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
+
 import java.util.*;
 
 @Repository
@@ -38,10 +39,9 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        if (cache.getCache().containsKey(Long.toString(id))){
+        if (cache.getCache().containsKey(Long.toString(id))) {
             return Optional.ofNullable(cache.get(Long.toString(id)));
-        }
-        else{
+        } else {
             DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
             try {
                 Optional<User> temp = Optional.ofNullable(currentSession.getHibernateSession().get(User.class, id));
@@ -64,8 +64,8 @@ public class UserDaoHibernate implements UserDao {
             } else {
                 hibernateSession.persist(user);
             }
-            hibernateSession.save(user);
-            cache.put(Long.toString(user.getId()),user);
+            hibernateSession.flush();
+            cache.put(Long.toString(user.getId()), user);
             return user.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -82,7 +82,7 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        for (User user :cache.getCache().values()){
+        for (User user : cache.getCache().values()) {
             if (user.getLogin().equals(login))
                 return Optional.ofNullable(cache.get(Long.toString(user.getId())));
         }
@@ -92,7 +92,7 @@ public class UserDaoHibernate implements UserDao {
             Query query = currentSession.getHibernateSession().createQuery(hql);
             query.setParameter("login", login);
             List users = query.list();
-            return Optional.ofNullable((User)users.get(0));
+            return Optional.ofNullable((User) users.get(0));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -100,11 +100,11 @@ public class UserDaoHibernate implements UserDao {
     }
 
     @Override
-    public List<User> findAllUser(){
+    public List<User> findAllUser() {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
             String hql = "From " + User.class.getSimpleName();
-            List <User> users = currentSession.getHibernateSession().createQuery(hql, User.class).list();
+            List<User> users = currentSession.getHibernateSession().createQuery(hql, User.class).list();
             users.forEach(user -> cache.put(Long.toString(user.getId()), user));
             return users;
         } catch (Exception e) {

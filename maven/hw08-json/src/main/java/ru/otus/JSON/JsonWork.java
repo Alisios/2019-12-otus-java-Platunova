@@ -1,4 +1,5 @@
 package ru.otus.JSON;
+
 import com.google.gson.Gson;
 
 import javax.json.Json;
@@ -13,6 +14,6 @@ public class JsonWork {
         var serializer = new DIYgson();
         Gson gson = new Gson();
         System.out.println(serializer.toJson(new HWObject()));
-        System.out.println("Are two gsons equals? " +  gson.toJson(new HWObject()).equals(serializer.toJson(new HWObject())));
+        System.out.println("Are two gsons equals? " + gson.toJson(new HWObject()).equals(serializer.toJson(new HWObject())));
     }
 }

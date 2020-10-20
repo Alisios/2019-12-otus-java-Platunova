@@ -11,18 +11,18 @@ import ru.otus.orm.jdbc.sessionmanager.SessionManagerJdbc;
 
 import java.util.*;
 
-public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
-    private static Logger logger = LoggerFactory.getLogger(UserDaoJdbc.class);
+public class UserDaoJdbcTemplate<T> implements JdbcTemplate<T> {
+    private static final Logger logger = LoggerFactory.getLogger(UserDaoJdbc.class);
 
     private final SessionManagerJdbc sessionManager;
     private final DbExecutor<T> dbExecutor;
     private final JdbcMapper<T> jdbcMapper;
-    private final CreateSqlStatement<T> createSqlStatement ;
+    private final CreateSqlStatement<T> createSqlStatement;
     private final Map<Class, List> cachedUsersId = new HashMap<>();
     private final List<Long> cachedUsersIdlist = new ArrayList<>();
-    private Optional <Long> id;
+    private Optional<Long> id;
 
-    public UserDaoJdbcTemplate(SessionManagerJdbc sessionManager, DbExecutor<T> dbExecutor, JdbcMapper<T> jdbcMapper,CreateSqlStatement<T> createSqlStatement) {
+    public UserDaoJdbcTemplate(SessionManagerJdbc sessionManager, DbExecutor<T> dbExecutor, JdbcMapper<T> jdbcMapper, CreateSqlStatement<T> createSqlStatement) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
         this.jdbcMapper = jdbcMapper;
@@ -33,7 +33,7 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     public void create(T objectData) {
         try {
             cachedUsersIdlist.add(dbExecutor.insertRecord(sessionManager.getCurrentSession().getConnection(),
-                    createSqlStatement.getSqlStatement((Class<T>) objectData.getClass(),"insert"),
+                    createSqlStatement.getSqlStatement((Class<T>) objectData.getClass(), "insert"),
                     jdbcMapper.getParams(objectData)));
             cachedUsersId.put(objectData.getClass(), cachedUsersIdlist);
         } catch (Exception e) {
@@ -43,42 +43,41 @@ public class UserDaoJdbcTemplate <T> implements JdbcTemplate <T> {
     }
 
     @Override
-    public void createOrUpdate(T objectData){
+    public void createOrUpdate(T objectData) {
         id = jdbcMapper.getId(objectData);
         Class clazz = objectData.getClass();
         if (cachedUsersId.containsKey(clazz) && (cachedUsersId.get(clazz).contains(id.orElseThrow())))
-                update(objectData);
+            update(objectData);
         else
             create(objectData);
     }
 
     @Override
-    public void update(T objectData)  {
+    public void update(T objectData) {
         try {
             dbExecutor.updateRecord(sessionManager.getCurrentSession().getConnection(),
-                    createSqlStatement.getSqlStatement((Class<T>) objectData.getClass(),"update"), id.get(),
+                    createSqlStatement.getSqlStatement((Class<T>) objectData.getClass(), "update"), id.get(),
                     jdbcMapper.getParams(objectData));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
         }
-}
+    }
 
     @Override
-    public  Optional <T> load(long id, Class<?> clazz) {
+    public Optional<T> load(long id, Class<?> clazz) {
         try {
-            return   dbExecutor.selectRecord(sessionManager.getCurrentSession().getConnection(),
-                    createSqlStatement.getSqlStatement((Class<T>) clazz,"select"), id, resultSet -> {
-            try {
-                if (resultSet.next()) {
-                    return jdbcMapper.createObjectFromResultSet(resultSet, (Class<T>) clazz);
-                }
-            }
-            catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-            return null;
-          });
+            return dbExecutor.selectRecord(sessionManager.getCurrentSession().getConnection(),
+                    createSqlStatement.getSqlStatement((Class<T>) clazz, "select"), id, resultSet -> {
+                        try {
+                            if (resultSet.next()) {
+                                return jdbcMapper.createObjectFromResultSet(resultSet, (Class<T>) clazz);
+                            }
+                        } catch (Exception e) {
+                            logger.error(e.getMessage(), e);
+                        }
+                        return null;
+                    });
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

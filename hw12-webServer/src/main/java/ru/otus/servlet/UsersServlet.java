@@ -46,10 +46,9 @@ public class UsersServlet extends HttpServlet {
         String login = request.getParameter(PARAM_LOGIN);
         String password = request.getParameter(PARAM_PASSWORD);
         try {
-            dbServiceUser.saveUser(new User(name,Integer.parseInt(age),login,password));
-        }
-        catch (Exception e){
-            System.out.println("Ошибка при создании нового User: "+ e.getCause());
+            dbServiceUser.saveUser(new User(name, Integer.parseInt(age), login, password));
+        } catch (Exception e) {
+            System.out.println("Ошибка при создании нового User: " + e.getCause());
         }
         response.sendRedirect("/users");
     }

@@ -20,11 +20,12 @@ class AddressDataSet {
     private User owner;
 
 
-    public AddressDataSet(){
+    public AddressDataSet() {
 
     }
-    public AddressDataSet(String street, User owner){
-        this.street=street;
+
+    public AddressDataSet(String street, User owner) {
+        this.street = street;
         this.owner = owner;
 
     }
@@ -34,7 +35,7 @@ class AddressDataSet {
         return "AddressDataSet{" +
                 "id=" + id +
                 ", street='" + street +
-                ", ownerId=" + owner.getId() +'\'' +
+                ", ownerId=" + owner.getId() + '\'' +
                 '}';
     }
 
@@ -45,12 +46,12 @@ class AddressDataSet {
         AddressDataSet that = (AddressDataSet) o;
         return id == that.id &&
                 Objects.equals(street, that.street) &&
-                Objects.equals(owner, that.owner);
+                Objects.equals(owner.getId(), that.owner.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, street, owner);
+        return Objects.hash(id, street, owner.getId());
     }
 
     public long getId() {

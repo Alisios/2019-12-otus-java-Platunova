@@ -1,18 +1,22 @@
 package ru.otus.Annotations;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 import ru.otus.AnnotationsPackage.*;
 
 class TestLaunch {
-    private static long exceptionsForAllTests = 0;
-    private static long numberOfSuccessfulTests = 0;
-    static void launch(String name) throws Exception {
-        Class obj = Class.forName(name);
-        Method[] methodsOfObject = obj.getDeclaredMethods();
-        ArrayList<Method> beforeList = new ArrayList<>();
-        ArrayList<Method> afterList = new ArrayList<>();
-        ArrayList<Method> testList = new ArrayList<>();
+    private long exceptionsForAllTests = 0;
+    private long numberOfSuccessfulTests = 0;
+
+    public void launch(String name) throws Exception {
+
+        final Class obj = Class.forName(name);
+        final Method[] methodsOfObject = obj.getDeclaredMethods();
+        final ArrayList<Method> beforeList = new ArrayList<>();
+        final ArrayList<Method> afterList = new ArrayList<>();
+        final ArrayList<Method> testList = new ArrayList<>();
 
         for (var m1 : methodsOfObject) {
             if (m1.isAnnotationPresent(Before.class))
@@ -24,7 +28,7 @@ class TestLaunch {
         }
         for (Method mTest : testList) {
             Constructor constructor = obj.getDeclaredConstructor();
-            Object testObj= constructor.newInstance();
+            Object testObj = constructor.newInstance();
             for (Method mBefore : beforeList) {
                 mBefore.setAccessible(true);
                 mBefore.invoke(testObj);
@@ -33,9 +37,8 @@ class TestLaunch {
                 mTest.setAccessible(true);
                 mTest.invoke(testObj);
                 numberOfSuccessfulTests++;
-            }
-            catch (Exception e) {
-                System.out.println(e.getCause()+" in " + mTest.getName());
+            } catch (Exception e) {
+                System.out.println(e.getCause() + " in " + mTest.getName());
                 exceptionsForAllTests++;
             }
             for (Method mAfter : afterList) {
@@ -44,13 +47,16 @@ class TestLaunch {
             }
         }
     }
-    static long getNumberOfSuccessfulTests(){
+
+    public long getNumberOfSuccessfulTests() {
         return numberOfSuccessfulTests;
     }
-    static long getNumberOfTests(){
-        return numberOfSuccessfulTests+exceptionsForAllTests;
+
+    public long getNumberOfTests() {
+        return numberOfSuccessfulTests + exceptionsForAllTests;
     }
-    static long getNumberOfFailedTests(){
+
+    public long getNumberOfFailedTests() {
         return exceptionsForAllTests;
     }
 }

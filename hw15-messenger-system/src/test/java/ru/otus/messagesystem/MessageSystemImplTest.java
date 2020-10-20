@@ -18,6 +18,7 @@ import ru.otus.front.FrontendService;
 import ru.otus.front.FrontendServiceImpl;
 import ru.otus.front.handlers.GetUserDataResponseHandler;
 import ru.otus.front.handlers.SaveUserDataResponseHandler;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -50,11 +51,11 @@ class MessageSystemImplTest {
     @DisplayName("корректную передачу данных между фронтом и бэком")
     void correctDataExchangingBetweenFrontAndBack() throws InterruptedException {
         createMessageSystem(true);
-        frontendService.getUsers(users->{
+        frontendService.getUsers(users -> {
             logger.info("users {}", users);
             assertThat(users).isEqualTo(listOfUser);
         });
-        frontendService.saveUser(user, userSaved->{
+        frontendService.saveUser(user, userSaved -> {
             logger.info("user {}, saved {}", user, userSaved);
             assertThat(userSaved).isEqualTo(user);
         });

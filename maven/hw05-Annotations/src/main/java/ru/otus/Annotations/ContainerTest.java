@@ -1,16 +1,21 @@
 package ru.otus.Annotations;
+
 import ru.otus.AnnotationsPackage.*;
 
-public class ContainerTest  {
+public class ContainerTest {
     @Before
-    public void settings(){
+    public void settings() {
         System.out.println("Settings");
-    };
+    }
+
+    ;
 
     @Before
-    public void settings2()  {
+    public void settings2() {
         System.out.println("Settings2");
-    };
+    }
+
+    ;
 
     @Test
     public void test1() {
@@ -18,18 +23,24 @@ public class ContainerTest  {
     }
 
     @Test
-    public void test2()  {
+    public void test2() {
         System.out.println("Test #2");
-    };
+    }
 
-    public void testWithoutAnnotation()  {
+    ;
+
+    public void testWithoutAnnotation() {
         System.out.println("Test without Annotation");
-    };
+    }
+
+    ;
 
     @After
     public void closeAll() {
         System.out.println("Close all");
-    };
+    }
+
+    ;
 
     @Before
     public void settings3() {

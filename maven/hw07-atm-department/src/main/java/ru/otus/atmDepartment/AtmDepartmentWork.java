@@ -16,20 +16,20 @@ public class AtmDepartmentWork {
         atmDepartment.addObserver(atmFacade2);
         atmDepartment.addObserver(atmFacade3);
         atmDepartment.addObserver(atmFacade4);
-        System.out.println("Баланс средств во всех банкоматах объединения: "+ atmDepartment.balanceOfAllAtms());
+        System.out.println("Баланс средств во всех банкоматах объединения: " + atmDepartment.balanceOfAllAtms());
         atmFacade1.getAtmProcessor().withDrawMoney(100000);
         atmFacade2.getAtmProcessor().withDrawMoney(100000);
-        System.out.println("Баланс средств во всех банкоматах объединения: "+ atmDepartment.balanceOfAllAtms());
+        System.out.println("Баланс средств во всех банкоматах объединения: " + atmDepartment.balanceOfAllAtms());
         atmDepartment.updateObservers();
-        System.out.println("Баланс средств во всех банкоматах объединения: "+ atmDepartment.balanceOfAllAtms());
+        System.out.println("Баланс средств во всех банкоматах объединения: " + atmDepartment.balanceOfAllAtms());
         atmDepartment.removeObserver(atmFacade4);
-        System.out.println("Баланс средств во всех банкоматах объединения: "+ atmDepartment.balanceOfAllAtms());
+        System.out.println("Баланс средств во всех банкоматах объединения: " + atmDepartment.balanceOfAllAtms());
         atmFacade1.getAtmProcessor().withDrawMoney(100000);
-        System.out.println("Баланс средств во всех банкоматах объединения: "+ atmDepartment.balanceOfAllAtms());
+        System.out.println("Баланс средств во всех банкоматах объединения: " + atmDepartment.balanceOfAllAtms());
         atmDepartment.updateObservers();
-        System.out.println("Баланс средств во всех банкоматах объединения: "+ atmDepartment.balanceOfAllAtms());
+        System.out.println("Баланс средств во всех банкоматах объединения: " + atmDepartment.balanceOfAllAtms());
 
-   }
+    }
 }
 
 

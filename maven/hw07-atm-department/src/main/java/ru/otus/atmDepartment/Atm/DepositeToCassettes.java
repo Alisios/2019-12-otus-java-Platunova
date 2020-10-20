@@ -1,11 +1,15 @@
 package ru.otus.atmDepartment.Atm;
+
 import java.util.ArrayList;
 
-/** класс реализует внесение денежных средств в атм по кассетам **/
-class DepositeToCassettes implements Command{
-    private ArrayList<Integer> nominal = new ArrayList<>();
-    private ArrayList<Integer> numberOfNominal=new ArrayList<>();
-    DepositeToCassettes( ArrayList<Integer> nominal, ArrayList<Integer> numberOfNominal){
+/**
+ * класс реализует внесение денежных средств в атм по кассетам
+ **/
+class DepositeToCassettes implements Command {
+    private final ArrayList<Integer> nominal = new ArrayList<>();
+    private final ArrayList<Integer> numberOfNominal = new ArrayList<>();
+
+    DepositeToCassettes(ArrayList<Integer> nominal, ArrayList<Integer> numberOfNominal) {
         this.nominal.addAll(nominal);
         this.numberOfNominal.addAll(numberOfNominal);
     }

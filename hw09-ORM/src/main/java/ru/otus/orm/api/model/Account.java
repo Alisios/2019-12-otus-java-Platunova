@@ -7,11 +7,11 @@ import java.util.Objects;
 
 public class Account {
     @Id
-    private  long no;
-    private  String type;
+    private long no;
+    private String type;
     private BigDecimal rest;
 
-    public Account(){
+    public Account() {
 
     }
 
@@ -24,19 +24,21 @@ public class Account {
     public long getNo() {
         return no;
     }
-    public void setNo (long no){
-        this.no=no;
+
+    public void setNo(long no) {
+        this.no = no;
     }
 
-    public void setType (String type){
-       this.type=type;
+    public void setType(String type) {
+        this.type = type;
     }
+
     public String getType() {
         return type;
     }
 
-    public void setRest (BigDecimal rest){
-        this.rest=rest;
+    public void setRest(BigDecimal rest) {
+        this.rest = rest;
     }
 
     public BigDecimal getRest() {
@@ -47,7 +49,7 @@ public class Account {
     public String toString() {
         return "Account{" +
                 "no=" + no +
-                ", type='" + type  +
+                ", type='" + type +
                 ", rest='" + rest.toString() + '\'' +
                 '}';
     }

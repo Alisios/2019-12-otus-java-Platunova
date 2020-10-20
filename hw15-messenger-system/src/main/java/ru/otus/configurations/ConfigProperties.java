@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigProperties {
 
-    private String frontendServiceClientName ;
+    private String frontendServiceClientName;
 
-    private  String backendServiceClientName;
+    private String backendServiceClientName;
 
 
     public String getFrontendServiceClientName() {

@@ -1,4 +1,5 @@
 package ru.otus.backend.handlers;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.otus.api.model.User;
 import ru.otus.backend.db.service.DBServiceUser;

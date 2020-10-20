@@ -1,11 +1,11 @@
 package ru.otus.jmm;
 
-public class NumberThread implements Runnable{
-    private MessagePrint number;
-    private String threadName;
-    private boolean firstKey;
+public class NumberThread implements Runnable {
+    private final MessagePrint number;
+    private final String threadName;
+    private final boolean firstKey;
 
-    NumberThread(MessagePrint number, String threadName, boolean firstKey){
+    NumberThread(MessagePrint number, String threadName, boolean firstKey) {
         this.number = number;
         this.threadName = threadName;
         this.firstKey = firstKey;

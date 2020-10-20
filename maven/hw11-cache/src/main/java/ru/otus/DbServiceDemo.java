@@ -18,36 +18,40 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**этот класс демонстрирует работу MyCache**/
+/**
+ * этот класс демонстрирует работу MyCache
+ **/
 public class DbServiceDemo {
-  private static Logger logger = LoggerFactory.getLogger(DbServiceDemo.class);
-  public static void main(String[] args) {
+    private static Logger logger = LoggerFactory.getLogger(DbServiceDemo.class);
 
-     SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml",
-            User.class, AddressDataSet.class, PhoneDataSet.class);
+    public static void main(String[] args) {
 
-    SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
-    UserDao userDao = new UserDaoHibernate(sessionManager);
-    DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
+        SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml",
+                User.class, AddressDataSet.class, PhoneDataSet.class);
 
-    List<User> users = new ArrayList<>();
-    for (int idx = 0; idx < 160; idx++){
-      users.add(new User ( "Джон", idx));
-      users.get(idx).setAddress(new AddressDataSet("Москва", users.get(idx)));
-      users.get(idx).setPhones(Collections.singletonList(new PhoneDataSet("+79157383393",users.get(idx))));
-      dbServiceUser.saveUser(users.get(idx));
+        SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
+        UserDao userDao = new UserDaoHibernate(sessionManager);
+        DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
+
+        List<User> users = new ArrayList<>();
+        for (int idx = 0; idx < 160; idx++) {
+            users.add(new User("Джон", idx));
+            users.get(idx).setAddress(new AddressDataSet("Москва", users.get(idx)));
+            users.get(idx).setPhones(Collections.singletonList(new PhoneDataSet("+79157383393", users.get(idx))));
+            dbServiceUser.saveUser(users.get(idx));
+        }
+        for (int idx = 1; idx < 161; idx++) {
+            outputUserOptional("Created user ", dbServiceUser.getUser(idx));
+        }
+
+        sessionManager.close();
+        sessionFactory.close();
     }
-    for (int idx = 1; idx < 161; idx++){
-      outputUserOptional("Created user ",dbServiceUser.getUser(idx));
-    }
-    sessionManager.close();
-    sessionFactory.close();
-  }
 
-  private static void outputUserOptional(String header, Optional<User> mayBeUser) {
-    System.out.println("-----------------------------------------------------------");
-    System.out.println(header);
-    mayBeUser.ifPresentOrElse(System.out::println, () -> logger.info("User not found"));
-  }
+    private static void outputUserOptional(String header, Optional<User> mayBeUser) {
+        System.out.println("-----------------------------------------------------------");
+        System.out.println(header);
+        mayBeUser.ifPresentOrElse(System.out::println, () -> logger.info("User not found"));
+    }
 
 }

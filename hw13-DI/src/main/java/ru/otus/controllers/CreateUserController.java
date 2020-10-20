@@ -15,9 +15,9 @@ public class CreateUserController {
     private final DBServiceUser dbServiceUser;
     private final PasswordEncoder passwordEncoder;
 
-    public CreateUserController(DBServiceUser dbServiceUser,PasswordEncoder passwordEncoder) {
+    public CreateUserController(DBServiceUser dbServiceUser, PasswordEncoder passwordEncoder) {
         this.dbServiceUser = dbServiceUser;
-        this.passwordEncoder=passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping({"/create"})

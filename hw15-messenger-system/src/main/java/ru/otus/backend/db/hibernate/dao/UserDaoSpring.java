@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.model.User;
+
 import java.util.*;
 
 @Repository
@@ -19,12 +20,15 @@ public class UserDaoSpring implements UserDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public UserDaoSpring() { };
+    public UserDaoSpring() {
+    }
+
+    ;
 
     @Override
     public Optional<User> findById(long id) {
-            Optional<User> temp = Optional.ofNullable(sessionFactory.getCurrentSession().get(User.class, id));
-            return temp;
+        Optional<User> temp = Optional.ofNullable(sessionFactory.getCurrentSession().get(User.class, id));
+        return temp;
     }
 
     @Override
@@ -46,14 +50,14 @@ public class UserDaoSpring implements UserDao {
         Query query = hibernateSession.createQuery(hql);
         query.setParameter("login", login);
         List users = query.list();
-        return Optional.ofNullable((User)users.get(0));
+        return Optional.ofNullable((User) users.get(0));
     }
 
     @Override
-    public List<User> findAllUser(){
+    public List<User> findAllUser() {
         Session hibernateSession = sessionFactory.getCurrentSession();
         String hql = "From " + User.class.getSimpleName();
-        List <User> users = hibernateSession.createQuery(hql, User.class).list();
+        List<User> users = hibernateSession.createQuery(hql, User.class).list();
         return users;
     }
 }

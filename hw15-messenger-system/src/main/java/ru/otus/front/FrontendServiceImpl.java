@@ -21,13 +21,13 @@ public class FrontendServiceImpl implements FrontendService {
     private final MsClient msClient;
     private final String backendServiceClientName;
 
-    public FrontendServiceImpl(String backendServiceClientName,  MsClient msClient) {
+    public FrontendServiceImpl(String backendServiceClientName, MsClient msClient) {
         this.msClient = msClient;
         this.backendServiceClientName = backendServiceClientName;
     }
 
     @Override
-    public void getUsers( Consumer<List<User>> dataConsumer) {
+    public void getUsers(Consumer<List<User>> dataConsumer) {
         Message outMsg = msClient.produceMessage(backendServiceClientName, null, MessageType.GET_USERS);
         consumerMap.put(outMsg.getId(), dataConsumer);
         msClient.sendMessage(outMsg);

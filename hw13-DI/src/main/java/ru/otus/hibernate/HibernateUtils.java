@@ -11,21 +11,21 @@ import java.util.Arrays;
 
 public final class HibernateUtils {
 
-  private HibernateUtils() {
-  }
+    private HibernateUtils() {
+    }
 
-  public static SessionFactory buildSessionFactory(String configResourceFileName,
-                                                   Class<?>... annotatedClasses) {
-    Configuration configuration = new Configuration().configure(configResourceFileName);
-    MetadataSources metadataSources = new MetadataSources(createServiceRegistry(configuration));
-    Arrays.stream(annotatedClasses).forEach(metadataSources::addAnnotatedClass);
+    public static SessionFactory buildSessionFactory(String configResourceFileName,
+                                                     Class<?>... annotatedClasses) {
+        Configuration configuration = new Configuration().configure(configResourceFileName);
+        MetadataSources metadataSources = new MetadataSources(createServiceRegistry(configuration));
+        Arrays.stream(annotatedClasses).forEach(metadataSources::addAnnotatedClass);
 
-    Metadata metadata = metadataSources.getMetadataBuilder().build();
-    return metadata.getSessionFactoryBuilder().build();
-  }
+        Metadata metadata = metadataSources.getMetadataBuilder().build();
+        return metadata.getSessionFactoryBuilder().build();
+    }
 
-  private static StandardServiceRegistry createServiceRegistry(Configuration configuration) {
-    return new StandardServiceRegistryBuilder()
-        .applySettings(configuration.getProperties()).build();
-  }
+    private static StandardServiceRegistry createServiceRegistry(Configuration configuration) {
+        return new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+    }
 }

@@ -1,4 +1,5 @@
 package ru.otus.backend.handlers;
+
 import ru.otus.api.model.User;
 import ru.otus.backend.db.service.DBServiceUser;
 import ru.otus.helpers.Serializers;

@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service;
 import ru.otus.api.service.DBServiceUser;
 
 @Service
-public class UserAuthorisationService implements UserDetailsService
-{
+public class UserAuthorisationService implements UserDetailsService {
     @Autowired
     private DBServiceUser dbServiceUser;
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException
-    {
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         ru.otus.api.model.User user = dbServiceUser.getUser(login).orElse(null);
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("User is not found");
         }
         return org.springframework.security.core.userdetails.User

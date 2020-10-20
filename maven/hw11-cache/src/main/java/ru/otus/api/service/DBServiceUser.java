@@ -2,10 +2,10 @@ package ru.otus.api.service;
 
 import java.util.Optional;
 
-public interface DBServiceUser <T>  {
+public interface DBServiceUser<T> {
 
-  long saveUser(T user);
+    long saveUser(T user);
 
-  Optional<T> getUser(long id);
+    Optional<T> getUser(long id);
 
 }

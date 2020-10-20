@@ -9,6 +9,7 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ru.otus.api.model.User;
+
 import javax.sql.DataSource;
 import java.util.Properties;
 

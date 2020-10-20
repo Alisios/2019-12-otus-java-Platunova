@@ -2,6 +2,7 @@ package ru.otus.servlet;
 
 import ru.otus.services.TemplateProcessor;
 import ru.otus.services.UserAuthService;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

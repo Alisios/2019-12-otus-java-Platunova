@@ -11,9 +11,9 @@ import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
 public class APIConfiguration {
 
     @Bean
-    SessionManagerHibernate sessionManager (){
-    return new SessionManagerHibernate(HibernateUtils.buildSessionFactory("hibernate.cfg.xml",
-            User.class));
+    SessionManagerHibernate sessionManager() {
+        return new SessionManagerHibernate(HibernateUtils.buildSessionFactory("hibernate.cfg.xml",
+                User.class));
     }
 
     @Bean(initMethod = "initiateUsers")

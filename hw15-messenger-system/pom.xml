@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!--    <parent>-->
-        <groupId>ru.otus</groupId>
-<!--        <artifactId>diploma-project-</artifactId>-->
-        <version>2019-12-SNAPSHOT</version>
-<!--    </parent>-->
+    <!--    <parent>-->
+    <groupId>ru.otus</groupId>
+    <!--        <artifactId>diploma-project-</artifactId>-->
+    <version>2019-12-SNAPSHOT</version>
+    <!--    </parent>-->
 
     <artifactId>hw15-messenger-system</artifactId>
 
@@ -183,10 +183,10 @@
         </dependency>
 
         <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-junit-jupiter</artifactId>
-        <version>${mockito-core.version}</version>
-        <scope>test</scope>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

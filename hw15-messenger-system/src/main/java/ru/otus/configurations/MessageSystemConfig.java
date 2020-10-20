@@ -24,14 +24,14 @@ public class MessageSystemConfig {
     final private ConfigProperties configProperties;
 
     @Autowired
-    MessageSystemConfig(DBServiceUser dbServiceUser,PasswordEncoder passwordEncoder, ConfigProperties configProperties){
+    MessageSystemConfig(DBServiceUser dbServiceUser, PasswordEncoder passwordEncoder, ConfigProperties configProperties) {
         this.dbServiceUser = dbServiceUser;
         this.passwordEncoder = passwordEncoder;
         this.configProperties = configProperties;
     }
 
     @Bean(destroyMethod = "dispose")
-    MessageSystem messageSystem () {
+    MessageSystem messageSystem() {
         return new MessageSystemImpl();
     }
 
@@ -45,12 +45,12 @@ public class MessageSystemConfig {
     }
 
     @Bean
-    MsClient frontendMsClient (  MessageSystem messageSystem){
+    MsClient frontendMsClient(MessageSystem messageSystem) {
         return new MsClientImpl(configProperties.getFrontendServiceClientName(), messageSystem);
     }
 
     @Bean
-    FrontendService frontendService( MessageSystem messageSystem, MsClient frontendMsClient) {
+    FrontendService frontendService(MessageSystem messageSystem, MsClient frontendMsClient) {
         FrontendService frontendService = new FrontendServiceImpl(configProperties.getBackendServiceClientName(), frontendMsClient);
         frontendMsClient.addHandler(MessageType.GET_USERS, new GetUserDataResponseHandler(frontendService));
         frontendMsClient.addHandler(MessageType.SAVE_USER, new SaveUserDataResponseHandler(frontendService));

@@ -39,6 +39,7 @@ class UserDaoJdbcTemplateTest {
         createSqlStatement = new CreateSqlStatement();
         dataSource = new DataSourceH2();
     }
+
     @BeforeAll
     static void setUp2() throws SQLException {
         DataSource dataSource = new DataSourceH2();
@@ -52,14 +53,14 @@ class UserDaoJdbcTemplateTest {
     void createLoadAndUpdateUsersCorrectly(User user, int id) throws Exception {
         SessionManagerJdbc sessionManager = new SessionManagerJdbc(dataSource);
         DbExecutor<User> dbExecutor = new DbExecutor<>();
-        UserDaoJdbcTemplate<User> userDaoJdbcTemplate = new UserDaoJdbcTemplate<>(sessionManager, dbExecutor,jdbcMapper, createSqlStatement);
+        UserDaoJdbcTemplate<User> userDaoJdbcTemplate = new UserDaoJdbcTemplate<>(sessionManager, dbExecutor, jdbcMapper, createSqlStatement);
         UserDaoJdbc<User> userDao = new UserDaoJdbc<>(sessionManager, userDaoJdbcTemplate);
         DBServiceUser<User> dbServiceUser = new DbServiceUserImpl<>(userDao);
         dbServiceUser.saveUser(user);
-        assertEquals(user,  dbServiceUser.getUser(id, User.class).get());
+        assertEquals(user, dbServiceUser.getUser(id, User.class).get());
         user.setAge(33);
         dbServiceUser.saveUser(user);
-        assertEquals(user,  dbServiceUser.getUser(id, User.class).get());
+        assertEquals(user, dbServiceUser.getUser(id, User.class).get());
     }
 
     @ParameterizedTest
@@ -68,16 +69,16 @@ class UserDaoJdbcTemplateTest {
     void createLoadAndUpdateAccountsCorrectly(Account account, int id) throws Exception {
         SessionManagerJdbc sessionManager = new SessionManagerJdbc(dataSource);
         DbExecutor<Account> dbExecutor = new DbExecutor<>();
-        UserDaoJdbcTemplate<Account> userDaoJdbcTemplate = new UserDaoJdbcTemplate<>(sessionManager, dbExecutor,jdbcMapper, createSqlStatement);
+        UserDaoJdbcTemplate<Account> userDaoJdbcTemplate = new UserDaoJdbcTemplate<>(sessionManager, dbExecutor, jdbcMapper, createSqlStatement);
         UserDaoJdbc<Account> userDao = new UserDaoJdbc<>(sessionManager, userDaoJdbcTemplate);
 
         DBServiceUser<Account> dbServiceUser = new DbServiceUserImpl<>(userDao);
         dbServiceUser.saveUser(account);
 
-        assertEquals(account,  dbServiceUser.getUser(id, Account.class).get());
+        assertEquals(account, dbServiceUser.getUser(id, Account.class).get());
         account.setRest(new BigDecimal(30));
         dbServiceUser.saveUser(account);
-        assertEquals(account,  dbServiceUser.getUser(id, Account.class).get());
+        assertEquals(account, dbServiceUser.getUser(id, Account.class).get());
     }
 
     private static void createTableUser(DataSource dataSource) throws SQLException {
@@ -86,6 +87,7 @@ class UserDaoJdbcTemplateTest {
             pst.executeUpdate();
         }
     }
+
     private static void createTableAccount(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement pst = connection.prepareStatement("create table Account(no bigint(20) NOT NULL auto_increment, type varchar(255), rest number)")) {
@@ -100,11 +102,12 @@ class UserDaoJdbcTemplateTest {
                 Arguments.of(new User(3, "Джон", 43), 3),
                 Arguments.of(new User(4, "Костя", 30), 4));
     }
+
     private static Stream<Arguments> generateDataAccount() {
         return Stream.of(
-                Arguments.of(new Account(1, "Тип1", new BigDecimal(11)),1),
-                Arguments.of(new Account(2, "Тип2", new BigDecimal(22)),2),
-                Arguments.of(new Account(3, "Тип3", new BigDecimal(33)),3),
-                Arguments.of(new Account(4, "Тип4", new BigDecimal(44)),4));
+                Arguments.of(new Account(1, "Тип1", new BigDecimal(11)), 1),
+                Arguments.of(new Account(2, "Тип2", new BigDecimal(22)), 2),
+                Arguments.of(new Account(3, "Тип3", new BigDecimal(33)), 3),
+                Arguments.of(new Account(4, "Тип4", new BigDecimal(44)), 4));
     }
 }

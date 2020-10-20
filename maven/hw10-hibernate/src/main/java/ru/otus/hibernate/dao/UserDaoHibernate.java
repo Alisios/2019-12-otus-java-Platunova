@@ -43,7 +43,7 @@ public class UserDaoHibernate implements UserDao {
             } else {
                 hibernateSession.persist(user);
             }
-            hibernateSession.save(user);
+            hibernateSession.flush();
             return user.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

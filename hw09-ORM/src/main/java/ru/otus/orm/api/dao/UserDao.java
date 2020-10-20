@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import ru.otus.orm.api.sessionmanager.SessionManager;
 
-public interface UserDao <T>  {
-  Optional<T> findById(long id, Class clazz);
+public interface UserDao<T> {
+    Optional<T> findById(long id, Class clazz);
 
-  void saveUser(T user);
+    void saveUser(T user);
 
-  SessionManager getSessionManager();
+    SessionManager getSessionManager();
 }

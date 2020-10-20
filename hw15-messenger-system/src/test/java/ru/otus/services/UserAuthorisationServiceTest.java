@@ -51,7 +51,7 @@ class UserAuthorisationServiceTest {
 
     @DisplayName("доступ закрытых ресурсов для ADMIN")
     @Test
-    @WithMockUser  (username="admin123",authorities={"ADMIN"},password="11111")
+    @WithMockUser(username = "admin123", authorities = {"ADMIN"}, password = "11111")
     void showUsersOnlyForAdmin() throws Exception {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
@@ -63,7 +63,7 @@ class UserAuthorisationServiceTest {
 
     @DisplayName("доступ для USER только к начальной странице")
     @Test
-    @WithMockUser  (username="admin123",authorities={"USER"},password="11111")
+    @WithMockUser(username = "admin123", authorities = {"USER"}, password = "11111")
     void showOnlyIndexForUser() throws Exception {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)

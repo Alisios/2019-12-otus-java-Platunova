@@ -36,15 +36,15 @@ public final class MessageSystemImpl implements MessageSystem {
     private final ExecutorService msgHandler = Executors.newFixedThreadPool(MSG_HANDLER_THREAD_LIMIT,
             new ThreadFactory() {
 
-        private final AtomicInteger threadNameSeq = new AtomicInteger(0);
+                private final AtomicInteger threadNameSeq = new AtomicInteger(0);
 
-        @Override
-        public Thread newThread(Runnable runnable) {
-            Thread thread = new Thread(runnable);
-            thread.setName("msg-handler-thread-" + threadNameSeq.incrementAndGet());
-            return thread;
-        }
-    });
+                @Override
+                public Thread newThread(Runnable runnable) {
+                    Thread thread = new Thread(runnable);
+                    thread.setName("msg-handler-thread-" + threadNameSeq.incrementAndGet());
+                    return thread;
+                }
+            });
 
     public MessageSystemImpl() {
         start();

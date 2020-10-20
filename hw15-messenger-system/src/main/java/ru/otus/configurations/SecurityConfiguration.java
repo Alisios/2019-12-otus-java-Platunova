@@ -18,7 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserAuthorisationService userDetailsService;
 
     @Autowired
-    SecurityConfiguration(UserAuthorisationService userDetailsService){
+    SecurityConfiguration(UserAuthorisationService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests().antMatchers("/index").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/users","/create").hasAuthority("ADMIN")
+                .authorizeRequests().antMatchers("/users", "/create").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
                 .and().sessionManagement().disable()
@@ -43,11 +43,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return  new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
-   @Autowired
+    @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);;
+        auth.userDetailsService(userDetailsService);
+        ;
     }
 }

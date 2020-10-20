@@ -20,11 +20,12 @@ class AddressDataSet {
     private User owner;
 
 
-    public AddressDataSet(){
+    public AddressDataSet() {
 
     }
-    public AddressDataSet(String street, User owner){
-        this.street=street;
+
+    public AddressDataSet(String street, User owner) {
+        this.street = street;
         this.owner = owner;
 
     }
@@ -34,7 +35,7 @@ class AddressDataSet {
         return "AddressDataSet{" +
                 "id=" + id +
                 ", street='" + street +
-                ", ownerId=" + owner.getId() +'\'' +
+                ", ownerId=" + owner.getId() + '\'' +
                 '}';
     }
 

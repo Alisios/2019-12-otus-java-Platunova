@@ -6,15 +6,15 @@ import java.util.*;
 /*Класс для демонстрации работы самодельного DIYgson()*/
 public class HWObject implements Serializable {
 
-     private int valueInt = 145678;
-     private Integer valueInteger = 190000;
-     private String valueString = "строчечка";
-     private ArrayList<String> arrayListStr = new ArrayList<>(Arrays.asList("100", "70",  "10", "5", "0", "20"));
-     private Set<Integer > hashSet = new HashSet<>(Arrays.asList(123,45,3,4,5,6,678));
-     private TreeMap<String, ArrayList<Integer>> treeMap =  new TreeMap<>();
-     private  Double [] arrayDouble = {123.5, 456.6, 789.6};
-     private Integer [] arrayInteger = {1, 2, 3};
-     private int [] arrayInt= {4,5,6};
+    private int valueInt = 145678;
+    private Integer valueInteger = 190000;
+    private String valueString = "строчечка";
+    private ArrayList<String> arrayListStr = new ArrayList<>(Arrays.asList("100", "70", "10", "5", "0", "20"));
+    private Set<Integer> hashSet = new HashSet<>(Arrays.asList(123, 45, 3, 4, 5, 6, 678));
+    private TreeMap<String, ArrayList<Integer>> treeMap = new TreeMap<>();
+    private Double[] arrayDouble = {123.5, 456.6, 789.6};
+    private Integer[] arrayInteger = {1, 2, 3};
+    private int[] arrayInt = {4, 5, 6};
 
     @Override
     public String toString() {
@@ -57,10 +57,12 @@ public class HWObject implements Serializable {
     }
 
     HWObject() {
-        treeMap.put("key1", new ArrayList<>(Arrays.asList(1, 2,  3, 4, 5, 6)));
-        treeMap.put("key2", new ArrayList<>(Arrays.asList(7, 8,  9, 10,11, 12)));
-        treeMap.put("key3", new ArrayList<>(Arrays.asList(17, 18,  19, 110,111, 112)));
-    };
+        treeMap.put("key1", new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
+        treeMap.put("key2", new ArrayList<>(Arrays.asList(7, 8, 9, 10, 11, 12)));
+        treeMap.put("key3", new ArrayList<>(Arrays.asList(17, 18, 19, 110, 111, 112)));
+    }
+
+    ;
 
     public int getValueInt() {
         return valueInt;

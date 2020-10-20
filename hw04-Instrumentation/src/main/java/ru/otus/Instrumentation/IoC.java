@@ -1,4 +1,5 @@
 package ru.otus.Instrumentation;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -7,23 +8,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class IoC <T> {
+class IoC<T> {
 
     @SuppressWarnings("unchecked")
-    static <T> T createLoggingProxy(T testLogging, Class<?> testLoggingInterface, Class< ? extends Annotation> testLoggingInterfaceAnnotation) {
+    static <T> T createLoggingProxy(T testLogging, Class<?> testLoggingInterface, Class<? extends Annotation> testLoggingInterfaceAnnotation) {
         InvocationHandler handler = new LogInvocationHandler<>(testLogging, testLoggingInterfaceAnnotation);
 
         return (T) Proxy.newProxyInstance(IoC.class.getClassLoader(),
                 new Class<?>[]{testLoggingInterface}, handler);
     }
 
-    static class LogInvocationHandler <T> implements InvocationHandler {
+    static class LogInvocationHandler<T> implements InvocationHandler {
         private final T testLogging;
-        private static List<String> methodsWithAnnotationList = new ArrayList<>();
+        private final List<String> methodsWithAnnotationList = new ArrayList<>();
 
-        LogInvocationHandler(T testLogging, Class< ? extends Annotation> testLoggingInterfaceAnnotation) {
+        LogInvocationHandler(T testLogging, Class<? extends Annotation> testLoggingInterfaceAnnotation) {
             this.testLogging = testLogging;
-            defineMethodsWithAnnotation(testLogging,testLoggingInterfaceAnnotation);
+            defineMethodsWithAnnotation(testLogging, testLoggingInterfaceAnnotation);
         }
 
         @Override
@@ -38,11 +39,11 @@ class IoC <T> {
             return methodsWithAnnotationList.contains(method.getName() + Arrays.toString(method.getParameterTypes()) + method.getReturnType().getName());
         }
 
-         private void defineMethodsWithAnnotation(T testLogging, Class<? extends Annotation> testLoggingInterfaceAnnotation) {
+        private void defineMethodsWithAnnotation(T testLogging, Class<? extends Annotation> testLoggingInterfaceAnnotation) {
             Class<?> cl = testLogging.getClass();
             for (Method m : cl.getDeclaredMethods()) {
                 if (m.isAnnotationPresent(testLoggingInterfaceAnnotation)) {
-                    methodsWithAnnotationList.add(m.getName()+
+                    methodsWithAnnotationList.add(m.getName() +
                             Arrays.toString(m.getParameterTypes()) +
                             m.getReturnType().getName());
                 }

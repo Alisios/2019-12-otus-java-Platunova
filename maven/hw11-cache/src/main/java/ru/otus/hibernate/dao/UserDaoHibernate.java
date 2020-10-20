@@ -1,14 +1,12 @@
 package ru.otus.hibernate.dao;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.dao.UserDaoException;
 import ru.otus.api.model.User;
 import ru.otus.api.sessionmanager.SessionManager;
-import ru.otus.cachehw.HwCache;
 import ru.otus.cachehw.HwListener;
 import ru.otus.cachehw.MyCache;
 import ru.otus.hibernate.sessionmanager.DatabaseSessionHibernate;
@@ -17,7 +15,7 @@ import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
 import java.util.Optional;
 
 public class UserDaoHibernate implements UserDao {
-    private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 
     private final SessionManagerHibernate sessionManager;
     private MyCache<String, User> cache = new MyCache<>();
@@ -37,10 +35,9 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        if (cache.getCache().containsKey(Long.toString(id))){
+        if (cache.getCache().containsKey(Long.toString(id))) {
             return Optional.ofNullable(cache.get(Long.toString(id)));
-        }
-        else{
+        } else {
             DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
             try {
                 Optional<User> temp = Optional.ofNullable(currentSession.getHibernateSession().get(User.class, id));
@@ -63,8 +60,8 @@ public class UserDaoHibernate implements UserDao {
             } else {
                 hibernateSession.persist(user);
             }
-            hibernateSession.save(user);
-            cache.put(Long.toString(user.getId()),user);
+            hibernateSession.flush();
+            cache.put(Long.toString(user.getId()), user);
             return user.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

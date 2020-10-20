@@ -21,7 +21,7 @@ public class PhoneDataSet {
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User ownerOfPhone;
 
     public PhoneDataSet() {
@@ -61,7 +61,7 @@ public class PhoneDataSet {
         return "PhoneDataSet{" +
                 "id=" + id +
                 ", number='" + number +
-                ", ownerId=" + ownerOfPhone.getId() +'\'' +
+                ", ownerId=" + ownerOfPhone.getId() + '\'' +
                 '}';
     }
 
