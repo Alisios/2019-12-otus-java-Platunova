@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Концерты</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <h2>Детали мероприятия</h2>
+    <div>
+        <!--/*@thymesVar id="concert" type="ru.otus.backend.model.ConcertRestModel"*/-->
+        <!--/*@thymesVar id="tickets" type="List<ru.otus.backend.model.TicketModel>"*/-->
+        <form class="form-horizontal" th:action="@{/concert}" method="post">
+            <input type="hidden" th:field="*{concert.id}"/>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Исполнитель:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{concert.artist}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Дата проведения:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{concert.date}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Место проведения:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{concert.place}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">URL:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{concert.concertUrl}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Билеты (менять строго по формату!)</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{concert.ticketsToString}"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+
+<!--<table class="table table-striped">-->
+<!--    <tr>-->
+<!--        <th>Id</th>-->
+<!--        <th>Type</th>-->
+<!--        <th>Cost</th>-->
+<!--    </tr>-->
+
+<!--    &lt;!&ndash;/*@thymesVar id="tickets" type="List<ru.otus.backend.model.TicketModel>"*/&ndash;&gt;-->
+<!--    <tr th:each="ticket : ${concert.tickets}">-->
+<!--        <td th:text="${ticket.id}">Concert id</td>-->
+<!--        <td th:text="${ticket.type}">Type</td>-->
+<!--        <td th:text="${ticket.cost}">Cost</td>-->
+<!--    </tr>-->
+<!--</table>-->
+
+
+<!--/*@thymesVar id="tickets" type="List<ru.otus.backend.model.TicketModel>"*/-->
+<!--/*@thymesVar id="ticket" type="ru.otus.backend.model.TicketModel"*/-->
+<!--<tr th:each="ticket : ${concert.tickets}">-->
+<!--    <td-->
+<!--    <div class="form-group">-->
+<!--        <label class="col-sm-2 control-label">Ticket Id</label>-->
+<!--        <div class="col-sm-10">-->
+<!--            <input type="number" class="form-control" th:field="*{ticket.id}"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </td>-->
+
+<!--    <td-->
+<!--    <div class="form-group">-->
+<!--        <label class="col-sm-2 control-label">Ticket Cost</label>-->
+<!--        <div class="col-sm-10">-->
+<!--            <input type="number" class="form-control" th:field="*{ticket.cost}"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </td>-->
+
+<!--    <td-->
+<!--    <div class="form-group">-->
+<!--        <label class="col-sm-2 control-label">Ticket type</label>-->
+<!--        <div class="col-sm-10">-->
+<!--            <input type="text" class="form-control" th:field="*{ticket.type}"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </td>-->
+<!--</tr>-->

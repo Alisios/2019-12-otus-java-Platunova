@@ -1,0 +1,68 @@
+rabbitmq-properties:
+  username: guest
+  password: guest
+  host: localhost
+  channelCacheSizeMax: 8
+  connectionCacheSizeMax: 2
+
+  xDeadLettersExchange: dead_letters_exchange
+  xDeadLetterQueue: dead_letters_queue
+
+  backProducerExchange: back_producer_exchange
+
+logging:
+  file:
+    name: logs/mylog.log
+
+  pattern: ${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{70}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+
+  level:
+    com:
+      netflix:
+        eureka: OFF
+        discovery: OFF
+    org:
+      springframework:
+        data:
+          mongodb: DEBUG
+
+spring:
+  application:
+    name: error-logging-service
+
+  data:
+    mongodb:
+      authentication-database: admin
+      database: logDB
+      host: localhost
+      port: 27017
+
+server:
+  port: 8025
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+management:
+  server:
+    port: 8020
+
+  endpoints:
+    web:
+      exposure:
+        include: health, info, beans, metrics, loggers, threaddump, hystrix-stream, configprops,caches
+
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+
+
+
+
+

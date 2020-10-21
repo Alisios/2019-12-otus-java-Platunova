@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <cache
+            name="ru.otus.backend.model.User"
+            maxElementsInMemory="100"
+            eternal="false"
+            timeToIdleSeconds="240"
+            diskPersistent = "false"
+            overflowToDisk = "false"
+            timeToLiveSeconds="240"/>
+
+    <cache
+            name="ru.otus.backend.model.ConcertModel"
+            maxEntriesLocalHeap="100"
+            eternal="false"
+            timeToIdleSeconds="240"
+            diskPersistent = "false"
+            overflowToDisk = "false"
+            timeToLiveSeconds="240"/>
+
+    <diskStore path="java.io.tmpdir"/>
+    <defaultCache
+            maxElementsInMemory="100"
+            eternal="false"
+            diskPersistent = "false"
+            timeToIdleSeconds="240"
+            timeToLiveSeconds="240"
+            overflowToDisk="false"/>
+</ehcache>
