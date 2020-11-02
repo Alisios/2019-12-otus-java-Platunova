@@ -1,0 +1,50 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    initialize: true
+    initialization-mode: always
+
+hibernate:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/alisa
+    username: alisa
+    password: alisa
+
+  jpa:
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    show_sql: true
+    hbm2ddl.auto: none
+    generate_statistics: true
+    query.substitutions: true 1, false 0
+    connection:
+      enable_lazy_load_no_trans: false
+
+  #  javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
+
+  cache:
+    use_second_level_cache: true
+    use_query_cache: true
+    region:
+      factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+#      factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+
+net:
+  sf:
+    ehcache:
+      configurationResourceName: ehcache.xml
+
+logging:
+  pattern: ${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{70}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+  level:
+    com:
+      netflix:
+        eureka: OFF
+        discovery: OFF
+    org:
+      hibernate: debug
+#  file: logs/mylog.log

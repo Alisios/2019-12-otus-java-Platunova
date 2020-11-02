@@ -1,0 +1,104 @@
+server:
+  port: 8040
+
+hibernate:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/alisa
+    username: alisa
+    password: alisa
+
+  dialect: org.hibernate.dialect.PostgreSQL10Dialect
+  hbm2ddl:
+    auto: none
+  show_sql: true
+  generate_statistics: true
+  query:
+    substitutions: true 1, false 0
+  connection:
+    enable_lazy_load_no_trans: false
+
+  jpa:
+    properties:
+      current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+
+  cache:
+    use_second_level_cache: true
+    use_query_cache: true
+    region:
+      factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+
+net:
+  sf:
+    ehcache:
+      configurationResourceName: ehcache.xml
+
+rabbitmq-properties:
+  username: guest
+  password: guest
+  host: localhost
+  channelCacheSizeMax: 10
+  connectionCacheSizeMax: 3
+  xMessageTtl: 300000
+  xDeadLettersExchange: dead_letters_exchange
+  xDeadLetterQueue: dead_letters_queue
+
+  dbExchange: db_exchange
+  backProducerExchange: back_producer_exchange
+  monitoringExchange: monitoring_exchange
+
+  dbQueue: db_queue
+  monitoringQueue: monitoring_queue
+  backProduceQueue: back_producer_queue
+  backProducerWebExchange: back_producer_web_exchange
+  backProducerToWebQueue: back_producer_to_web_queue
+
+
+management:
+  server:
+    port: 8045
+
+  endpoints:
+    web:
+      exposure:
+        include: health, beans, metrics, loggers, threaddump, sessions, caches, configprops
+
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+
+logging:
+  pattern: ${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{70}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+  level:
+    #    org:
+    #      springframework: debug
+
+    com:
+      netflix:
+        eureka: OFF
+        discovery: OFF
+
+  file:
+    name: logs/mylog.log
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+spring:
+  application:
+    name: db-service
+  datasource:
+
+    initialization-mode: always
+
+  cache:
+    type: ehcache
+
+    ehcache:
+      config: classpath:ehcache.xml
