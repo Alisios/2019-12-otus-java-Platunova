@@ -27,7 +27,7 @@
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <apache-commons.version>4.4</apache-commons.version>
         <spring.version>5.2.5.RELEASE</spring.version>
-        <spring.security.version>5.3.1.RELEASE</spring.security.version>
+        <spring.security.version>5.3.9.RELEASE</spring.security.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
 
     </properties>
